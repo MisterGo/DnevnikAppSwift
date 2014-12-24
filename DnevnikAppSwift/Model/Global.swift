@@ -9,7 +9,7 @@
 import Foundation
 
 struct Global {
-    static var isLogoned = false
+    static var signedIn = false
     static let RESPONSE_OK = 200
     static let loginUrl = "https://login.dnevnik.ru"
     static let dnevnikUrl = "https://dnevnik.ru"

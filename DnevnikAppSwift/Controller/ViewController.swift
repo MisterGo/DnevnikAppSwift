@@ -142,7 +142,7 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
         
         //UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
-        if Global.isLogoned {
+        if Global.signedIn {
             //getFullName()
             self.headerLabel.text = "Вы вошли, как"
             //self.fullnameLabel.text = "Фамилия Имя Отчество"
@@ -165,7 +165,7 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
     }
     
     override func viewDidAppear(animated: Bool) {
-        if Global.isLogoned {
+        if Global.signedIn {
             //self.headerLabel.text = "Вы вошли, как"
             //self.fullnameLabel.text = "Фамилия Имя Отчество"
             //self.userName.hidden = true
@@ -225,7 +225,7 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
                     // у учеников нет ссылок на children.dnevnik.ru
                     self.changeUrls(fullStr!)
 
-                    Global.isLogoned = true
+                    Global.signedIn = true
                     println("TimeTable URL: \(Global.timetableUrl)")
                     println("Marks URL: \(Global.marksUrl)")
                     }
@@ -249,7 +249,7 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
                     cookieStor.deleteCookie(c)
                     println("KOOKIE DELETED: \(c.name)")
                 }
-                Global.isLogoned = false
+                Global.signedIn = false
             }
             //self.navigationController?.popToRootViewControllerAnimated(true)
         }

@@ -60,9 +60,9 @@
 		5F0361F51A2853B500847B5A /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		5F0361F61A2853B500847B5A /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		5F0361FE1A28EEA500847B5A /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
-		5F0362001A28F15D00847B5A /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Global.swift; path = ../Global.swift; sourceTree = "<group>"; };
-		5F0362021A28F84300847B5A /* SidebarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SidebarViewController.swift; path = ../SidebarViewController.swift; sourceTree = "<group>"; };
-		5F0362041A298CC700847B5A /* MarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MarksViewController.swift; path = ../MarksViewController.swift; sourceTree = "<group>"; };
+		5F0362001A28F15D00847B5A /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
+		5F0362021A28F84300847B5A /* SidebarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarViewController.swift; sourceTree = "<group>"; };
+		5F0362041A298CC700847B5A /* MarksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarksViewController.swift; sourceTree = "<group>"; };
 		5F1C04F71A3C87E7004E8760 /* MyIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyIndicator.swift; sourceTree = "<group>"; };
 		5F1C04F91A3DEB30004E8760 /* LessonDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LessonDetailCell.swift; sourceTree = "<group>"; };
 		5F1C04FB1A3DEBCE004E8760 /* OtherDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherDetailCell.swift; sourceTree = "<group>"; };
@@ -78,18 +78,18 @@
 		5F4865771A3411E500741A61 /* LessonCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LessonCell.swift; sourceTree = "<group>"; };
 		5F4865791A35981C00741A61 /* homework.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homework.png; sourceTree = "<group>"; };
 		5F48657B1A35B0BB00741A61 /* circle_red_16_ns.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle_red_16_ns.png; sourceTree = "<group>"; };
-		5F4D506A1A2A135300947443 /* TimeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeTableViewController.swift; path = ../TimeTableViewController.swift; sourceTree = "<group>"; };
+		5F4D506A1A2A135300947443 /* TimeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeTableViewController.swift; sourceTree = "<group>"; };
 		5F614A721A31A2EC006DD0DD /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		5F6D79CD1A2B15A900E202D1 /* menu27.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu27.png; sourceTree = "<group>"; };
 		5F6D79D11A2B1B0800E202D1 /* menu48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu48.png; sourceTree = "<group>"; };
-		5F6D79D31A2B2E9800E202D1 /* HTTPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTTPHelper.swift; path = ../Controller/HTTPHelper.swift; sourceTree = "<group>"; };
+		5F6D79D31A2B2E9800E202D1 /* HTTPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPHelper.swift; sourceTree = "<group>"; };
 		5F6D79D61A2DA9E500E202D1 /* DHNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DHNetworkManager.swift; sourceTree = "<group>"; };
 		5F7601081A3861F100859EB9 /* AboutController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutController.swift; sourceTree = "<group>"; };
 		5F7F137B1A3C75A700968C9D /* TeacherCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeacherCell.swift; sourceTree = "<group>"; };
 		5F857C5819DE79C500F144FA /* DnevnikAppSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DnevnikAppSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F857C5C19DE79C500F144FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F857C5D19DE79C500F144FA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		5F857C5F19DE79C500F144FA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../ViewController.swift; sourceTree = "<group>"; };
+		5F857C5F19DE79C500F144FA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		5F857C6419DE79C500F144FA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		5F857C6719DE79C500F144FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		5F857C6D19DE79C500F144FA /* DnevnikAppSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DnevnikAppSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,11 +141,11 @@
 			children = (
 				5F614A721A31A2EC006DD0DD /* Main.storyboard */,
 				5F4865771A3411E500741A61 /* LessonCell.swift */,
-				5F7F137B1A3C75A700968C9D /* TeacherCell.swift */,
-				5F1C04F71A3C87E7004E8760 /* MyIndicator.swift */,
 				5F1C04F91A3DEB30004E8760 /* LessonDetailCell.swift */,
-				5F1C04FB1A3DEBCE004E8760 /* OtherDetailCell.swift */,
 				5F1C04FF1A3ED610004E8760 /* LessonTableViewCell.swift */,
+				5F1C04F71A3C87E7004E8760 /* MyIndicator.swift */,
+				5F1C04FB1A3DEBCE004E8760 /* OtherDetailCell.swift */,
+				5F7F137B1A3C75A700968C9D /* TeacherCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -153,14 +153,14 @@
 		5F4D506D1A2AF11400947443 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				5F4D506A1A2A135300947443 /* TimeTableViewController.swift */,
-				5F0362041A298CC700847B5A /* MarksViewController.swift */,
-				5F857C5F19DE79C500F144FA /* ViewController.swift */,
-				5F0362021A28F84300847B5A /* SidebarViewController.swift */,
-				5F8E3BCB1A36F23300EF2291 /* LessonDetailsController.swift */,
 				5F7601081A3861F100859EB9 /* AboutController.swift */,
-				5F1C04FD1A3DEDEC004E8760 /* LessonTableController.swift */,
 				5F1C05031A4035FA004E8760 /* AboutViewController.swift */,
+				5F8E3BCB1A36F23300EF2291 /* LessonDetailsController.swift */,
+				5F1C04FD1A3DEDEC004E8760 /* LessonTableController.swift */,
+				5F0362041A298CC700847B5A /* MarksViewController.swift */,
+				5F0362021A28F84300847B5A /* SidebarViewController.swift */,
+				5F4D506A1A2A135300947443 /* TimeTableViewController.swift */,
+				5F857C5F19DE79C500F144FA /* ViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -168,11 +168,11 @@
 		5F4D506E1A2AF1E300947443 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				5F0362001A28F15D00847B5A /* Global.swift */,
-				5F1FE45A1A302019009282A7 /* DnevnikWeek.swift */,
 				5F1FE45C1A3020A3009282A7 /* DnevnikDay.swift */,
 				5F1FE45E1A3020F6009282A7 /* DnevnikLesson.swift */,
 				5F1FE4601A30216F009282A7 /* DnevnikSubject.swift */,
+				5F1FE45A1A302019009282A7 /* DnevnikWeek.swift */,
+				5F0362001A28F15D00847B5A /* Global.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";

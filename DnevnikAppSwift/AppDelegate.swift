@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //println(" - \(c.domain) - \(c.name) - \(c.value) - \(c.expiresDate)\n")
             if c.domain == ".login.dnevnik.ru" {
                 
-                Global.isLogoned = true
+                Global.signedIn = true
                 
                 //let storyboard : UIStoryboard! = self.window?.rootViewController?.storyboard!
                 //let rootViewController : UIViewController! = storyboard.instantiateViewControllerWithIdentifier("marksNavigationController")! as UINavigationController
