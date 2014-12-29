@@ -112,7 +112,7 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
                 
                 let regManager = RegexManager(patt)
                 let fullNameArr = regManager.test(fullStr!)
-                println("fname = \(fullNameArr)")
+                //println("fname = \(fullNameArr)")
                 fullNameText = regManager.test(fullStr!)[0] as NSString
                 dispatch_async(dispatch_get_main_queue(), {
                     self.fullnameLabel.text = fullNameText
@@ -133,14 +133,10 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
         super.viewDidLoad()
         self.title = "DnevnikApp"
         
-        
         setupMenuButtonAction()
-        //self.view.setNeedsDisplay()
         
         self.fullnameLabel.font = UIFont.boldSystemFontOfSize(18)
         self.fullnameLabel.textColor = UIColor(red: 125/255, green: 184/255, blue: 45/255, alpha: 1)
-        
-        //UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         
         if Global.signedIn {
             //getFullName()
@@ -152,39 +148,21 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
         } else {
             self.headerLabel.text = "Вы не вошли в систему"
             self.fullnameLabel.text = "Войти:"
-            //if self.xss == nil {
-            //    println("xss is nil")
-            //    getXss()
-            //}
         }
-        
-        //UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-        
-        //println("IsLogoned = \(Global.isLogoned)")
         
     }
     
     override func viewDidAppear(animated: Bool) {
         if Global.signedIn {
-            //self.headerLabel.text = "Вы вошли, как"
-            //self.fullnameLabel.text = "Фамилия Имя Отчество"
-            //self.userName.hidden = true
-            //self.password.hidden = true
-            //self.loginButton.setTitle("Выйти", forState: nil) //titleLabel?.text = "Выйти"
             getFullName()
         } else {
-            //self.headerLabel.text = "Вы не вошли в систему"
-            //self.fullnameLabel.text = "Войти:"
             if self.xss == nil {
-                //println("xss is nil")
                 getXss()
             }
         }
     }
     
     @IBAction func loginButtonPressed(sender: AnyObject) {
-        //UIAlertView(title: "Login Pressed", message: "Name = \(userName.text), pass = \(password.text) , s = \(self.ss)", delegate: nil, cancelButtonTitle: "OK").show()
-        
         var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 50, 50)) as UIActivityIndicatorView
         actInd.center = self.view.center //self.fullnameLabel.center
         actInd.hidesWhenStopped = true
@@ -226,13 +204,12 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
                     self.changeUrls(fullStr!)
 
                     Global.signedIn = true
-                    println("TimeTable URL: \(Global.timetableUrl)")
-                    println("Marks URL: \(Global.marksUrl)")
+                    //println("TimeTable URL: \(Global.timetableUrl)")
+                    //println("Marks URL: \(Global.marksUrl)")
                     }
                 //}
                 
                 if error != nil {
-//                    let alert = UIAlertView(title:"Ой, всё!",message:error.localizedDescription, delegate:nil, cancelButtonTitle:"OK")
                     let alert = UIAlertView(title:"Ой, всё!",message:error.debugDescription, delegate:nil, cancelButtonTitle:"OK")
                     alert.show()
                 }
@@ -247,22 +224,19 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
             for c in cookies {
                 if c.domain == ".login.dnevnik.ru" {
                     cookieStor.deleteCookie(c)
-                    println("KOOKIE DELETED: \(c.name)")
+                    //println("KOOKIE DELETED: \(c.name)")
                 }
                 Global.signedIn = false
             }
-            //self.navigationController?.popToRootViewControllerAnimated(true)
         }
         
-//        let vc = MarksViewController(nibName: "MarksViewController", bundle: nil)
-//        navigationController?.pushViewController(vc, animated: true)
         
         actInd.stopAnimating()
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         var vc: AnyObject! = storyBoard.instantiateViewControllerWithIdentifier("userNavigationController")
         let rc : SWRevealViewController = self.revealViewController()
-        rc.pushFrontViewController(vc as UINavigationController, animated: true) //setFrontViewController(vc, animated: true)
+        rc.pushFrontViewController(vc as UINavigationController, animated: true)
 
         //return
         // Здесь нужно проверить, что логин прошел успешно.

@@ -12,8 +12,11 @@ class DnevnikLesson {
     let subject : DnevnikSubject?
     let subjectName : String!  // в будущем вместо subjectName будет ссылка на DnevnikSubject
     var number : Int = 0
-    var availability : String = ""
+    var availability : String = "" // color
+    var availState : String = ""
+    var availComment : String = ""
     var marks : [String] = []
+    var marksComments : [String] = []
     var homework : Bool = false
     var homeworkText : String = ""
     var homeworkState : String = ""

@@ -14,6 +14,8 @@ class MarksViewController : UITableViewController {
     
     var marksDays : [DnevnikDay] = []
 
+    var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 100, 100)) as UIActivityIndicatorView
+
     func setupMenuButtonAction() {
         if (revealViewController() != nil) {
             sidebarButton.target = revealViewController()
@@ -31,8 +33,6 @@ class MarksViewController : UITableViewController {
     }
     
     func makeDate(rusStr : String) -> String { //NSDate {
-        var patt : String
-        var regManager : RegexManager
         let monthDict : [String] =
             [
                 "января",
@@ -54,18 +54,12 @@ class MarksViewController : UITableViewController {
         var weekDay = ""
         // дата с сайта выглядит так: Понедельник, 1&nbsp;декабря&nbsp;2014
         // сначала число
-        //patt = ",\\s(\\d+?)&nbsp"
-        //regManager = RegexManager(patt)
-        
         day = parseString(rusStr, patt: ",\\s(\\d+?)&nbsp")[0] as String
         //day = regManager.test(rusStr)[0] as String
         if countElements(day) == 1 {
             day = "0" + day
         }
         // теперь месяц
-        //patt = "&nbsp;(.*?)&nbsp;"
-        //regManager = RegexManager(patt)
-        //let monthRus = regManager.test(rusStr)[0] as String
         let monthRus = parseString(rusStr, patt: "&nbsp;(.*?)&nbsp;")[0] as String
         for i in 1...monthDict.count {
             if monthDict[i - 1] == monthRus {
@@ -74,9 +68,6 @@ class MarksViewController : UITableViewController {
             }
         }
         // ну и год
-        //patt = "&nbsp;(\\d{4})$"
-        //regManager = RegexManager(patt)
-        //year = regManager.test(rusStr)[0] as String
         year = parseString(rusStr, patt: "&nbsp;(\\d{4})$")[0] as String
         
         // день недели тоже лишним не будет
@@ -95,14 +86,7 @@ class MarksViewController : UITableViewController {
     }
     
     func parsePage() {
-        var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 100, 100)) as UIActivityIndicatorView
-        actInd.center = self.tableView.center
-        actInd.hidesWhenStopped = true
-        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-        view.addSubview(actInd)
-        actInd.startAnimating()
-        
-        let reqUrl = NSURL(string: Global.marksUrl)
+        let reqUrl = NSURL(string: Global.marksUrl + "?year=2014&month=11&day=22")
         let request = NSURLRequest(URL:reqUrl!)
         let queue:NSOperationQueue = NSOperationQueue()
         
@@ -110,6 +94,9 @@ class MarksViewController : UITableViewController {
         
         NSURLConnection.sendAsynchronousRequest(request, queue: queue) {response,data,error in
             if data != nil {
+                // Почистим массив дней
+                self.marksDays = []
+                
                 let fullStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 let dayPatt = "<div\\sclass=\"panel blue2 clear\".*?<h3>(.*?)</h3>.*?</div></div></div>"
                 
@@ -141,7 +128,6 @@ class MarksViewController : UITableViewController {
                                 if marksArr.count > 0 {
                                     for i in 0...marksArr.count - 1 {
                                         lesson.marks.append(marksArr[i])
-                                        //lesson.marks.
                                     }
                                 }
                                 
@@ -180,7 +166,7 @@ class MarksViewController : UITableViewController {
                 }
                 dispatch_async(dispatch_get_main_queue(), {
                     //self.marksDays.append(dnevnikDay!)
-                    actInd.stopAnimating()
+                    self.actInd.stopAnimating()
                     self.refreshControl?.endRefreshing()
                     self.tableView.reloadData()
                 })
@@ -214,6 +200,12 @@ class MarksViewController : UITableViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
         if marksDays.count == 0 {
+            actInd.center = self.tableView.center
+            actInd.hidesWhenStopped = true
+            actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+            view.addSubview(actInd)
+            actInd.startAnimating()
+            
             parsePage()
         }
     }

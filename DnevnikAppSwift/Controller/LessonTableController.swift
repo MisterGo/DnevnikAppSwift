@@ -12,6 +12,7 @@ class LessonTableController : UITableViewController {
     
     var lesson : DnevnikLesson?
     var loaded = false
+    var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 50, 50)) as UIActivityIndicatorView
     
     let lessonSections = ["Учитель", "Детали", "Присутствие на уроке", "Домашние задания", "Оценки"]
     
@@ -24,17 +25,6 @@ class LessonTableController : UITableViewController {
     }
 
     func parsePage() {
-        var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 50, 50)) as UIActivityIndicatorView
-        //actInd.backgroundColor = UIColor(red: 0, green: 0, blue: 100/255, alpha: 0.3)
-        actInd.center = self.view.center
-        actInd.hidesWhenStopped = true
-        actInd.hidden = false
-        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-        self.view.addSubview(actInd)
-        //self.subjectView.bringSubviewToFront(actInd)
-        actInd.startAnimating()
-        //println("IND: \(actInd.frame.size), desc: \(actInd.description)")
-        
         let reqUrl = NSURL(string: self.lesson!.url)
         let request = NSURLRequest(URL:reqUrl!)
         let queue:NSOperationQueue = NSOperationQueue()
@@ -60,6 +50,7 @@ class LessonTableController : UITableViewController {
                 }
                 
                 var detailsBlock : [String : String] = [:]
+                
                 let detailsBlockPatt = "<dl\\s*?class=\"info\">.*?</dl>"
                 let detailsBlockStr = self.parseString(fullStr!, patt: detailsBlockPatt, full: true)[0]
                 
@@ -97,19 +88,64 @@ class LessonTableController : UITableViewController {
                 tmpLesson?.details = detailsBlock
                 //println("indexArr : \(detailsBlock)")
                 //println("block: \(detailsBlockStr)")
+                
+                let availPatt = "Присутствие на уроке.*?</h3>.*?<td class=\"tac ls\\D\".*?>(.*?)</td>"
+                let availArr = self.parseString(fullStr!, patt: availPatt)
+                if availArr.count > 0 {
+                    tmpLesson?.availState = availArr[0]
+                }
+                let availCommPatt = "Присутствие на уроке.*?</h3>.*?<td class=\"tac\".*?>(.*?)</td>"
+                let availCommArr = self.parseString(fullStr!, patt: availCommPatt)
+                if availCommArr.count > 0 {
+                    tmpLesson?.availComment = availCommArr[0]
+                }
+                //println("Avail: \(tmpLesson?.availability), \(tmpLesson?.availComment)")
 
-                let homeWorkPatt = "Домашние задания.*?</h3>.*?</strong>.*?</td>.*?<td>(.*?)</td>"
+                let homeWorkPatt = "Домашние задания.*?</h3>.*?</strong>.*?</td>.*?<td>(.*?)</td>.*?Оценки"
                 var homeWorkArr = self.parseString(fullStr!, patt: homeWorkPatt)
                 if homeWorkArr.count > 0 {
                     tmpLesson?.homeworkText = homeWorkArr[0]
                 }
-                let hwStatePatt = "Домашние задания.*?</h3>.*?</strong>.*?</td>.*?<td\\s*?class=\"tac nowrap.*?>(.*?)</td>"
+                let hwStatePatt = "Домашние задания.*?</h3>.*?</strong>.*?</td>.*?<td\\s*?class=\"tac nowrap.*?>(.*?)</td>.*?Оценки"
                 var hwStateArr = self.parseString(fullStr!, patt: hwStatePatt)
                 if hwStateArr.count > 0 {
                     tmpLesson?.homeworkState = hwStateArr[0]
                 }
-
                 
+                let marksBlockPatt = "Оценки за работу на уроке</h3>(.*?</div>\\s*?</div>\\s*?</div>\\s*?</div>\\s*?</div>)"
+                let marksBlockStr = self.parseString(fullStr!, patt: marksBlockPatt, full: true)[0]
+                //println("BLOCK: \(marksBlockStr)")
+                
+                let marksPatt = "class=\"mark\\s*m\\D\">(\\d)</span>"
+                let marksArr = self.parseString(marksBlockStr, patt: marksPatt)
+                if marksArr.count > 0 {
+                    for i in 0...marksArr.count - 1 {
+                        //tmpLesson?.marks.append(marksArr[i])
+                        //tmpLesson?.marksComments.append("-")
+                    }
+                }
+                //println("count: \(marksArr.count)")
+                //println("marks: \(tmpLesson?.marks), comm: \(tmpLesson?.marksComments)")
+
+                let marksCommPatt = "<div class=\"light\">(.*?)</div>"
+                let marksCommArr = self.parseString(marksBlockStr, patt: marksCommPatt)
+                if marksCommArr.count > 0 {
+                    for i in 0...marksCommArr.count - 1 {
+                        //tmpLesson?.marksComments[i] = marksCommArr[i]
+                        tmpLesson?.marksComments.append(marksCommArr[i])
+                    }
+                }
+                // специально для нашей англичанки
+                let marksCommPatt2 = "<div class=\"light\">.*?</div>(.*?)</td>"
+                let marksCommArr2 = self.parseString(marksBlockStr, patt: marksCommPatt2)
+                if marksCommArr2.count > 0 {
+                    for i in 0...marksCommArr2.count - 1 {
+                        //tmpLesson?.marksComments[i] = marksCommArr2[i]
+                        tmpLesson?.marksComments.append(marksCommArr2[i])
+                    }
+                }
+                //println("marks2: \(tmpLesson?.marks), comm2: \(tmpLesson?.marksComments)")
+
                 dispatch_async(dispatch_get_main_queue(), {
                     self.lesson = tmpLesson
                 })
@@ -117,7 +153,7 @@ class LessonTableController : UITableViewController {
             }
             dispatch_async(dispatch_get_main_queue(), {
                 self.loaded = true
-                actInd.stopAnimating()
+                self.actInd.stopAnimating()
                 self.refreshControl?.endRefreshing()
                 self.tableView.reloadData()
                 })
@@ -140,6 +176,13 @@ class LessonTableController : UITableViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
+        actInd.center = self.view.center
+        actInd.hidesWhenStopped = true
+        actInd.hidden = false
+        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        self.view.addSubview(actInd)
+        //self.subjectView.bringSubviewToFront(actInd)
+        actInd.startAnimating()
         parsePage()
     }
     
@@ -156,8 +199,10 @@ class LessonTableController : UITableViewController {
             return 80
         case find(lessonSections, "Детали")! :
             return 30
+//        case find(lessonSections, "Домашние задания")! :
+//            return 38
         default :
-            return 44
+            return 38
         }
     }
     
@@ -170,6 +215,9 @@ class LessonTableController : UITableViewController {
         case find(lessonSections, "Детали")! :
             let details = self.lesson?.details
             let arr = details?.keys.array as [String]!
+            return arr.count
+        case find(lessonSections, "Оценки")! :
+            let arr = self.lesson?.marks as [String]!
             return arr.count
         default :
             return 1
@@ -203,13 +251,35 @@ class LessonTableController : UITableViewController {
             var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
             
             var newCell = cell as OtherDetailCell
-            newCell.configureFor(lesson!, type: .homeWorkType)
+            newCell.configureFor(lesson!, key: lesson!.homeworkState, val: lesson!.homeworkText, type: .homeWorkType)
             return newCell
+        case find(lessonSections, "Оценки")! :
+            var cellIdentifier = "OtherDetail"
+            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
+            
+            let mark = self.lesson?.marks[indexPath.row]
+            let markComm = self.lesson?.marksComments[indexPath.row]
+            
+            var newCell = cell as OtherDetailCell
+            newCell.configureFor(lesson!, key: mark!, val: markComm!, type: .marksType)
+            return newCell
+        case find(lessonSections, "Присутствие на уроке")! :
+            var cellIdentifier = "OtherDetail"
+            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
+            
+            let avail = self.lesson?.availState
+            let availComm = self.lesson?.availComment
+            
+            var newCell = cell as OtherDetailCell
+            newCell.configureFor(lesson!, key: avail!, val: availComm!, type: .availType)
+            return newCell
+            
+            
         default :
             var cellIdentifier = "OtherDetail"
             var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
             var newCell = cell as OtherDetailCell
-            newCell.configureFor(lesson!, type: .marksType)
+            newCell.configureFor(lesson!, key: "--", val: "---", type: .availType)
             return newCell
         }
         

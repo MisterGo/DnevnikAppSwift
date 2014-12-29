@@ -16,21 +16,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-//        println("Hello!")
         
         let cookieStor = NSHTTPCookieStorage.sharedHTTPCookieStorage()
-        println("CookieStor: \(cookieStor.description)")
+        //println("CookieStor: \(cookieStor.description)")
         let cookies = cookieStor.cookies as [NSHTTPCookie]
         for c in cookies {
-            //println(" - \(c.domain) - \(c.name) - \(c.value) - \(c.expiresDate)\n")
             if c.domain == ".login.dnevnik.ru" {
-                
-                Global.signedIn = true
-                
-                //let storyboard : UIStoryboard! = self.window?.rootViewController?.storyboard!
-                //let rootViewController : UIViewController! = storyboard.instantiateViewControllerWithIdentifier("marksNavigationController")! as UINavigationController
-                //self.window?.rootViewController = rootViewController
-                //self.window?.makeKeyAndVisible()
+                //println(" - \(c.domain) - \(c.name) - \(c.value) - \(c.expiresDate)\n")
+                let cookieEndDate = c.expiresDate
+                let interval = cookieEndDate.timeIntervalSinceNow
+                //println("Interval = \(interval)")
+                if interval > 0 {
+                    Global.signedIn = true
+                }
                 return true
             }
         }

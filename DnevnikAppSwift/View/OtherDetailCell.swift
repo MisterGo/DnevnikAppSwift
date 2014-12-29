@@ -19,19 +19,47 @@ class OtherDetailCell : LessonTableViewCell {
         case marksType
     }
     
-    func configureFor(lesson : DnevnikLesson, type : cellType) {
+    func configureFor(lesson : DnevnikLesson, key: String, val: String, type : cellType) {
         super.configureFor()
         keyLabel.text = ""
         valLabel.text = ""
         
         keyView.backgroundColor = nil
-        if type == .homeWorkType {
-        if lesson.homeworkState != "" {
-            keyView.backgroundColor = UIColor(red: 255/255, green: 102/255, blue: 102/255, alpha: 1)
-        }
-        keyLabel.text = lesson.homeworkState
         keyLabel.textColor = UIColor.whiteColor()
-        valLabel.text = lesson.homeworkText
+
+        keyLabel.text = key
+        valLabel.text = val
+        if type == .homeWorkType {
+            if lesson.homeworkState != "" {
+                keyView.backgroundColor = UIColor(red: 255/255, green: 102/255, blue: 102/255, alpha: 1)
+            }
+            //keyLabel.text = key //lesson.homeworkState
+            //valLabel.text = val //lesson.homeworkText
+        } else if type == .marksType {
+            keyLabel.text = key //lesson.marks[i]
+            valLabel.text = val //lesson.marksComments[i]
+            keyLabel.font = UIFont.boldSystemFontOfSize(20)
+            switch key {
+            case "4", "5" :
+                keyView.backgroundColor = UIColor(red: 194/255, green: 210/255, blue: 58/255, alpha: 1) //.greenColor()
+            case "3" :
+                keyView.backgroundColor = UIColor(red: 249/255, green: 162/255, blue: 59/255, alpha: 1) //.orangeColor()
+            case "2" :
+                keyView.backgroundColor = UIColor(red: 255/255, green: 102/255, blue: 102/255, alpha: 1) //.redColor()
+            default :
+                keyView.backgroundColor = UIColor(red: 194/255, green: 210/255, blue: 58/255, alpha: 1)
+            }
+        } else if type == .availType {
+            switch lesson.availability {
+            case "G" :
+                keyView.backgroundColor = UIColor(red: 194/255, green: 210/255, blue: 58/255, alpha: 1)
+            case "B" :
+                keyView.backgroundColor = UIColor(red: 69/255, green: 157/255, blue: 214/255, alpha: 1)
+            case "R" :
+                keyView.backgroundColor = UIColor(red: 255/255, green: 102/255, blue: 102/255, alpha: 1)
+            default :
+                keyView.backgroundColor = nil
+            }
         }
         valLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping// (rawValue: 0)!
         valLabel.preferredMaxLayoutWidth = 229
