@@ -30,7 +30,8 @@ class OtherDetailCell : LessonTableViewCell {
         keyLabel.text = key
         valLabel.text = val
         if type == .homeWorkType {
-            if lesson.homeworkState != "" {
+            //if lesson.homeworkState != "" {
+            if key != "" {
                 keyView.backgroundColor = UIColor(red: 255/255, green: 102/255, blue: 102/255, alpha: 1)
             }
             //keyLabel.text = key //lesson.homeworkState
@@ -50,7 +51,8 @@ class OtherDetailCell : LessonTableViewCell {
                 keyView.backgroundColor = UIColor(red: 194/255, green: 210/255, blue: 58/255, alpha: 1)
             }
         } else if type == .availType {
-            switch lesson.availability {
+            //switch lesson.availability {
+            switch lesson.avail.color {
             case "G" :
                 keyView.backgroundColor = UIColor(red: 194/255, green: 210/255, blue: 58/255, alpha: 1)
             case "B" :

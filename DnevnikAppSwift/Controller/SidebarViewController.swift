@@ -51,7 +51,7 @@ class SidebarViewController : UITableViewController {
     }
     
     override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
-        if !Global.signedIn && identifier != "showLoginPage" {
+        if !Global.signedIn && identifier != "showLoginPage" && identifier != "showTable" {
             return false
         }
         return true

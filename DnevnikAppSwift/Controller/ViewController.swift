@@ -54,8 +54,13 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
             Global.marksUrl = "http://schools.dnevnik.ru/marks.aspx"
         } else {
             Global.timetableUrl = "http://children.dnevnik.ru/timetable.aspx"
-            Global.marksUrl = "http://children.dnevnik.ru/marks.aspx"
+            Global.marksUrl = "http://children.dnevnik.ru/marks.aspx"// + "?year=2014&month=11&day=22"
         }
+        
+        let date = NSDate()
+        let calendar = NSCalendar.currentCalendar()
+        let components = calendar.components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay, fromDate: date)
+        Global.marksUrl += "?year=\(components.year)&month=\(components.month)&day=\(components.day)"
     }
     
     func getXss() {
@@ -72,22 +77,26 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
         NSURLConnection.sendAsynchronousRequest(request, queue: queue) {response,data,error in
 //        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {response,data,error in
             if data != nil {
-                let fullStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                let fullHTML = NSString(data: data!, encoding: NSUTF8StringEncoding)
                 //println("DATA: \n \(fullStr!)")
-                let patt = "\\s*name=\"xss\"\\s*value=\"(.*?)\".*?/>"
+                //let patt = "\\s*name=\"xss\"\\s*value=\"(.*?)\".*?/>"
                 
-                let regManager = RegexManager(patt)
-                self.xss = regManager.test(fullStr!)[0] as NSString
-                //println("test: \(regManager.test(fullStr!))")
-//                self.headerLabel.text = self.xss
-                
+                let regManager = RegManager()   //RegexManager(patt)
+                self.xss = regManager.getFirstMatch(fullHTML!, pattern: "\\s*name=\"xss\"\\s*value=\"(.*?)\".*?/>")
+
+                //self.headerLabel.text = self.xss
+                dispatch_async(dispatch_get_main_queue(), {
+                    //println("xss: \(self.xss)")
+                    actInd.stopAnimating()
+                })
+
             }
             
             if error != nil {
                 let alert = UIAlertView(title:"Ой, всё!",message:error.localizedDescription, delegate:nil, cancelButtonTitle:"OK")
                 alert.show()
             }
-            actInd.stopAnimating()
+            
         }
     }
     

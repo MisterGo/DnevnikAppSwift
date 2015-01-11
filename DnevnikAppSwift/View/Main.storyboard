@@ -130,6 +130,17 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <toolbar key="tableFooterView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="AtY-Qc-eqI">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <items>
+                                <barButtonItem title="Prev" id="tRB-H8-pQC"/>
+                                <barButtonItem style="plain" systemItem="flexibleSpace" id="gc0-Ki-joL"/>
+                                <barButtonItem title="This" id="VMu-vn-YgZ"/>
+                                <barButtonItem style="plain" systemItem="flexibleSpace" id="hMu-uB-afS"/>
+                                <barButtonItem title="Next" id="s3k-ms-L42"/>
+                            </items>
+                        </toolbar>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" restorationIdentifier="Lesson Cell" selectionStyle="default" indentationWidth="10" reuseIdentifier="LessonCell" id="091-pk-CB5" customClass="LessonCell" customModule="DnevnikAppSwift" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -195,14 +206,18 @@
                     <navigationItem key="navigationItem" id="Cd4-BA-ldk">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="9Wh-mo-IoN"/>
                     </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="nextButton" destination="s3k-ms-L42" id="BrT-K8-10x"/>
+                        <outlet property="prevButton" destination="tRB-H8-pQC" id="q8E-UN-44Q"/>
                         <outlet property="sidebarButton" destination="9Wh-mo-IoN" id="VOK-ea-rKV"/>
+                        <outlet property="thisButton" destination="VMu-vn-YgZ" id="SHI-Le-h7D"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OQe-bl-TVQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="141" y="223"/>
+            <point key="canvasLocation" x="617" y="223"/>
         </scene>
         <!--Table Navigation Controller-->
         <scene sceneID="GiJ-e8-j43">
@@ -272,22 +287,20 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="312" translatesAutoresizingMaskIntoConstraints="NO" id="9tK-pi-RHW">
-                                <rect key="frame" x="4" y="72" width="312" height="353.5"/>
-                                <string key="text">На текущий момент в приложении реализован просмотр текущей недели с оценками и просмотр подробностей о каждом уроке, включая домашние задания.
+                                <rect key="frame" x="4" y="72" width="312" height="370"/>
+                                <mutableString key="text">На текущий момент в приложении реализован просмотр информации об уроках, включая просмотр подробностей о каждом уроке: домашние задания, оценки, информация о присутствии, и т.д.  Исправлено: 1. Вылет из приложения по истечении срока действия куки. 
 Добавлено:
-1. Изменен внешний вид представления с информацией об уроке (правда, пока не успел сделать информацию о присутствии и об оценках с комментариями к ним).
-2. Обновление информации с помощью pull-to-refresh (пока это имеет не много смысла. Так, для красоты).
-3. Добавлены индикаторы загрузки.
+1. Навигация на прошлую/следующую неделю по дневнику (прям нужно).
+2. Доработано представление с информацией об уроке. Кроме всего прочего, обнаружилось, что за один урок может быть как больше одной оценки, так и больше одного домашнего задания. Теперь все отображается корректно.
 
 В ближайших планах реализация следующих вещей:
-1. Навигация на прошлую/следующую неделю по дневнику (прям нужно).
-2. Страничка с расписанием звонков со всякими плюшками, типа подсветки урока, идущего в данный момент (без этого и сам уже как без рук).
+1. Страничка с расписанием звонков со всякими плюшками, типа подсветки урока, идущего в данный момент (самая актуальная задача).
 
 В дальнейших планах такие вещи, как:
 1. Хранение данных в локальной базе, чтобы при каждом обращении к страницам с информацией не расходовался интернет-трафик.
 2. Push-уведомления о различных событиях (окончание уроков, новые оценки, новые личные сообщения)
 
-Прошу присылать мне сообщения об ошибках и любые пожелания по работе приложения любым доступным способом.</string>
+Прошу присылать мне сообщения об ошибках и любые пожелания по работе приложения любым доступным способом.</mutableString>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -520,7 +533,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JEa-KP-5SG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="568" y="223"/>
+            <point key="canvasLocation" x="1166" y="223"/>
         </scene>
         <!--Lesson Table Controller-->
         <scene sceneID="dcc-Pi-h5o">
@@ -634,7 +647,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QNc-3Q-vPP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="944" y="223"/>
+            <point key="canvasLocation" x="1552" y="223"/>
         </scene>
     </scenes>
     <resources>

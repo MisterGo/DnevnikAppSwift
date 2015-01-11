@@ -16,6 +16,8 @@ class LessonTableController : UITableViewController {
     
     let lessonSections = ["Учитель", "Детали", "Присутствие на уроке", "Домашние задания", "Оценки"]
     
+    let regManager = RegManager()
+
     func parseString(str : String, patt : String, full : Bool = false) -> [String] {
         let regManager = RegexManager(patt)
         if full == false {
@@ -35,16 +37,16 @@ class LessonTableController : UITableViewController {
                 //sleep(1)
                 var tmpLesson = self.lesson
                 
-                let fullStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+                let fullHTML = NSString(data: data, encoding: NSUTF8StringEncoding)
                 
                 let photoPatt = "<h3>\\s*?Учитель\\s*?</h3>.*?img src=\"(.*?)\""
-                let photoArr = self.parseString(fullStr!, patt: photoPatt)
+                let photoArr = self.parseString(fullHTML!, patt: photoPatt)
                 if photoArr.count > 0 {
                     tmpLesson?.teacherPhotoUrl = photoArr[0].stringByReplacingOccurrencesOfString(".s.", withString: ".l.", options: nil, range: nil)
                 }
 
                 let teacherPatt = "<a\\s*?href=.*?class=\"u\">(.*?)</a>"
-                let teacherArr = self.parseString(fullStr!, patt: teacherPatt)
+                let teacherArr = self.parseString(fullHTML!, patt: teacherPatt)
                 if teacherArr.count > 0 {
                     tmpLesson?.teacher = teacherArr[0]
                 }
@@ -52,7 +54,7 @@ class LessonTableController : UITableViewController {
                 var detailsBlock : [String : String] = [:]
                 
                 let detailsBlockPatt = "<dl\\s*?class=\"info\">.*?</dl>"
-                let detailsBlockStr = self.parseString(fullStr!, patt: detailsBlockPatt, full: true)[0]
+                let detailsBlockStr = self.parseString(fullHTML!, patt: detailsBlockPatt, full: true)[0]
                 
                 let detailsIndexPatt = "<dt>(.*?)</dt>"
                 let detailsIndexArr = self.parseString(detailsBlockStr, patt: detailsIndexPatt)
@@ -79,9 +81,10 @@ class LessonTableController : UITableViewController {
                             }
                         }
                     }
-                    str = str.stringByReplacingOccurrencesOfString("&nbsp;", withString: " ", options: nil, range: nil)
-                    str = str.stringByReplacingOccurrencesOfString("&amp;#171;", withString: "\"", options: nil, range: nil)
-                    str = str.stringByReplacingOccurrencesOfString("&amp;#187;", withString: "\"", options: nil, range: nil)
+                    str = str
+                        .stringByReplacingOccurrencesOfString("&nbsp;", withString: " ", options: nil, range: nil)
+                        .stringByReplacingOccurrencesOfString("&amp;#171;", withString: "\"", options: nil, range: nil)
+                        .stringByReplacingOccurrencesOfString("&amp;#187;", withString: "\"", options: nil, range: nil)
 
                     detailsBlock.updateValue(str, forKey: key)
                 }
@@ -90,58 +93,63 @@ class LessonTableController : UITableViewController {
                 //println("block: \(detailsBlockStr)")
                 
                 let availPatt = "Присутствие на уроке.*?</h3>.*?<td class=\"tac ls\\D\".*?>(.*?)</td>"
-                let availArr = self.parseString(fullStr!, patt: availPatt)
-                if availArr.count > 0 {
-                    tmpLesson?.availState = availArr[0]
-                }
+                tmpLesson?.avail.state = self.regManager.getFirstMatch(fullHTML!, pattern: availPatt)
                 let availCommPatt = "Присутствие на уроке.*?</h3>.*?<td class=\"tac\".*?>(.*?)</td>"
-                let availCommArr = self.parseString(fullStr!, patt: availCommPatt)
-                if availCommArr.count > 0 {
-                    tmpLesson?.availComment = availCommArr[0]
-                }
-                //println("Avail: \(tmpLesson?.availability), \(tmpLesson?.availComment)")
+                tmpLesson?.avail.comment = self.regManager.getFirstMatch(fullHTML!, pattern: availCommPatt)
 
-                let homeWorkPatt = "Домашние задания.*?</h3>.*?</strong>.*?</td>.*?<td>(.*?)</td>.*?Оценки"
-                var homeWorkArr = self.parseString(fullStr!, patt: homeWorkPatt)
+                let hwBlockPatt = "Домашние задания.*?</h3>.*?</strong>.*?</td>.*?<td>(.*?)</td>.*?Оценки"
+                let hwBlockStr = self.regManager.getFirstString(fullHTML!, pattern: hwBlockPatt)
+
+                let homeWorkPatt = "<td>(.*?)</td>"
+                var homeWorkArr = self.regManager.getMatches(hwBlockStr, pattern: homeWorkPatt)
                 if homeWorkArr.count > 0 {
-                    tmpLesson?.homeworkText = homeWorkArr[0]
+                    for i in 0..<homeWorkArr.count {
+                        tmpLesson?.homeworks[i].text = homeWorkArr[i]
+                    }
                 }
-                let hwStatePatt = "Домашние задания.*?</h3>.*?</strong>.*?</td>.*?<td\\s*?class=\"tac nowrap.*?>(.*?)</td>.*?Оценки"
-                var hwStateArr = self.parseString(fullStr!, patt: hwStatePatt)
+                let hwStatePatt = "<td\\s*?class=\"tac nowrap.*?>(.*?)</td>"
+                var hwStateArr = self.regManager.getMatches(hwBlockStr, pattern: hwStatePatt)
                 if hwStateArr.count > 0 {
-                    tmpLesson?.homeworkState = hwStateArr[0]
+                    for i in 0..<hwStateArr.count {
+                        tmpLesson?.homeworks[i].state = hwStateArr[i]
+                    }
                 }
                 
-                let marksBlockPatt = "Оценки за работу на уроке</h3>(.*?</div>\\s*?</div>\\s*?</div>\\s*?</div>\\s*?</div>)"
-                let marksBlockStr = self.parseString(fullStr!, patt: marksBlockPatt, full: true)[0]
+                let marksBlockPatt = "Оценки за работу на уроке</h3>.*?class=\"mark\\s*m\\D\">.*?</div>\\s*?</div>\\s*?</div>\\s*?</div>\\s*?</div>"
+                let marksBlockStr = self.regManager.getFirstString(fullHTML!, pattern: marksBlockPatt)
+                //self.parseString(fullHTML!, patt: marksBlockPatt, full: true)[0]
                 //println("BLOCK: \(marksBlockStr)")
                 
+                /*
                 let marksPatt = "class=\"mark\\s*m\\D\">(\\d)</span>"
                 let marksArr = self.parseString(marksBlockStr, patt: marksPatt)
                 if marksArr.count > 0 {
-                    for i in 0...marksArr.count - 1 {
+                    for i in 0..<marksArr.count {
                         //tmpLesson?.marks.append(marksArr[i])
                         //tmpLesson?.marksComments.append("-")
                     }
                 }
+                */
                 //println("count: \(marksArr.count)")
                 //println("marks: \(tmpLesson?.marks), comm: \(tmpLesson?.marksComments)")
 
                 let marksCommPatt = "<div class=\"light\">(.*?)</div>"
                 let marksCommArr = self.parseString(marksBlockStr, patt: marksCommPatt)
+                var cnt = 0
                 if marksCommArr.count > 0 {
-                    for i in 0...marksCommArr.count - 1 {
-                        //tmpLesson?.marksComments[i] = marksCommArr[i]
-                        tmpLesson?.marksComments.append(marksCommArr[i])
+                    for i in 0..<marksCommArr.count {
+                        //tmpLesson?.marksComments.append(marksCommArr[i])
+                        tmpLesson?.marksNew[i].comment = marksCommArr[i]
+                        cnt++
                     }
                 }
                 // специально для нашей англичанки
                 let marksCommPatt2 = "<div class=\"light\">.*?</div>(.*?)</td>"
                 let marksCommArr2 = self.parseString(marksBlockStr, patt: marksCommPatt2)
-                if marksCommArr2.count > 0 {
-                    for i in 0...marksCommArr2.count - 1 {
-                        //tmpLesson?.marksComments[i] = marksCommArr2[i]
-                        tmpLesson?.marksComments.append(marksCommArr2[i])
+                if marksCommArr2.count > 0 && cnt < tmpLesson?.marksNew.count {
+                    for i in 0..<marksCommArr2.count {
+                        //tmpLesson?.marksComments.append(marksCommArr2[i])
+                        tmpLesson?.marksNew[i + cnt].comment = marksCommArr2[i]
                     }
                 }
                 //println("marks2: \(tmpLesson?.marks), comm2: \(tmpLesson?.marksComments)")
@@ -168,6 +176,7 @@ class LessonTableController : UITableViewController {
         super.viewDidLoad()
         // Установим footerView пустым, чтобы при загрузке не показывало пустые ячейки
         self.tableView.tableFooterView = UIView()
+        self.navigationController?.toolbarHidden = true
         
         self.refreshControl = UIRefreshControl()
         self.tableView.addSubview(self.refreshControl!)
@@ -186,6 +195,11 @@ class LessonTableController : UITableViewController {
         parsePage()
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(true)
+        self.navigationController?.setToolbarHidden(false, animated: true)
+    }
+        
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if loaded {
             return self.lessonSections.count
@@ -217,7 +231,11 @@ class LessonTableController : UITableViewController {
             let arr = details?.keys.array as [String]!
             return arr.count
         case find(lessonSections, "Оценки")! :
-            let arr = self.lesson?.marks as [String]!
+            let arr = self.lesson?.marksNew as [LessonMark]!
+            //self.lesson?.marks as [String]!
+            return arr.count
+        case find(lessonSections, "Домашние задания")! :
+            let arr = self.lesson?.homeworks as [LessonHomework]!
             return arr.count
         default :
             return 1
@@ -250,15 +268,19 @@ class LessonTableController : UITableViewController {
             var cellIdentifier = "OtherDetail"
             var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
             
+            let hwState = self.lesson?.homeworks[indexPath.row].state
+            let hwText = self.lesson?.homeworks[indexPath.row].text
+            
             var newCell = cell as OtherDetailCell
-            newCell.configureFor(lesson!, key: lesson!.homeworkState, val: lesson!.homeworkText, type: .homeWorkType)
+            //newCell.configureFor(lesson!, key: lesson!.homeworkState, val: lesson!.homeworkText, type: .homeWorkType)
+            newCell.configureFor(lesson!, key: hwState!, val: hwText!, type: .homeWorkType)
             return newCell
         case find(lessonSections, "Оценки")! :
             var cellIdentifier = "OtherDetail"
             var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
             
-            let mark = self.lesson?.marks[indexPath.row]
-            let markComm = self.lesson?.marksComments[indexPath.row]
+            let mark = self.lesson?.marksNew[indexPath.row].mark //self.lesson?.marks[indexPath.row]
+            let markComm = self.lesson?.marksNew[indexPath.row].comment //self.lesson?.marksComments[indexPath.row]
             
             var newCell = cell as OtherDetailCell
             newCell.configureFor(lesson!, key: mark!, val: markComm!, type: .marksType)
@@ -267,8 +289,8 @@ class LessonTableController : UITableViewController {
             var cellIdentifier = "OtherDetail"
             var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
             
-            let avail = self.lesson?.availState
-            let availComm = self.lesson?.availComment
+            let avail = self.lesson?.avail.state    //self.lesson?.availState
+            let availComm = self.lesson?.avail.comment    //self.lesson?.availComment
             
             var newCell = cell as OtherDetailCell
             newCell.configureFor(lesson!, key: avail!, val: availComm!, type: .availType)
