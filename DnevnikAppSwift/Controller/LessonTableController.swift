@@ -92,9 +92,9 @@ class LessonTableController : UITableViewController {
                 //println("indexArr : \(detailsBlock)")
                 //println("block: \(detailsBlockStr)")
                 
-                let availPatt = "Присутствие на уроке.*?</h3>.*?<td class=\"tac ls\\D\".*?>(.*?)</td>"
+                let availPatt = "Присутствие на уроке.*?</h3>.*?<td class=\"tac ls\\D\".*?>(.*?)</td>.*?Домашние задания"
                 tmpLesson?.avail.state = self.regManager.getFirstMatch(fullHTML!, pattern: availPatt)
-                let availCommPatt = "Присутствие на уроке.*?</h3>.*?<td class=\"tac\".*?>(.*?)</td>"
+                let availCommPatt = "Присутствие на уроке.*?</h3>.*?<td class=\"tac\".*?>(.*?)</td>.*?Домашние задания"
                 tmpLesson?.avail.comment = self.regManager.getFirstMatch(fullHTML!, pattern: availCommPatt)
 
                 let hwBlockPatt = "Домашние задания.*?</h3>.*?</strong>.*?</td>.*?<td>(.*?)</td>.*?Оценки"
@@ -221,7 +221,33 @@ class LessonTableController : UITableViewController {
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return self.lessonSections[section]
+        //return self.lessonSections[section]
+        var cnt = 0
+        switch section {
+        case find(lessonSections, "Детали")! :
+            let details = self.lesson?.details
+            let arr = details?.keys.array as [String]!
+            cnt = arr.count
+        case find(lessonSections, "Оценки")! :
+            let arr = self.lesson?.marksNew as [LessonMark]!
+            //self.lesson?.marks as [String]!
+            cnt = arr.count
+        case find(lessonSections, "Домашние задания")! :
+            let arr = self.lesson?.homeworks as [LessonHomework]!
+            cnt = arr.count
+        case find(lessonSections, "Присутствие на уроке")! :
+            let av = self.lesson?.avail
+            if av?.color != "X" {
+                cnt = 1
+            }
+        default :
+            cnt = 0
+        }
+        
+        if cnt > 0 {
+            return self.lessonSections[section]
+        }
+        return nil
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -237,6 +263,12 @@ class LessonTableController : UITableViewController {
         case find(lessonSections, "Домашние задания")! :
             let arr = self.lesson?.homeworks as [LessonHomework]!
             return arr.count
+        case find(lessonSections, "Присутствие на уроке")! :
+            let av = self.lesson?.avail
+            if av?.color != "X" {
+                return 1
+            }
+            return 0
         default :
             return 1
         }

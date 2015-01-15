@@ -217,7 +217,52 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OQe-bl-TVQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="617" y="223"/>
+            <point key="canvasLocation" x="141" y="223"/>
+        </scene>
+        <!--Root View Controller-->
+        <scene sceneID="Gts-UZ-Jzt">
+            <objects>
+                <tableViewController id="MXR-ix-cOS" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="q1e-rZ-seN">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="IZ3-NB-8fL">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IZ3-NB-8fL" id="Ke2-FC-IAW">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="MXR-ix-cOS" id="vYP-4l-fve"/>
+                            <outlet property="delegate" destination="MXR-ix-cOS" id="fhF-dk-xSj"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Root View Controller" id="t5h-DR-yr8"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VPL-hn-a09" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="141" y="893"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="b3m-pu-Awc">
+            <objects>
+                <navigationController id="SKz-R5-sXo" sceneMemberID="viewController">
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ddY-xe-4yc">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="MXR-ix-cOS" kind="relationship" relationship="rootViewController" id="3VD-sm-T0J"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Z5Z-mH-1Q5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-272" y="893"/>
         </scene>
         <!--Table Navigation Controller-->
         <scene sceneID="GiJ-e8-j43">
@@ -234,45 +279,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fKu-N1-UrP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-272" y="905"/>
-        </scene>
-        <!--Time Table View Controller-->
-        <scene sceneID="4oi-iz-OCd">
-            <objects>
-                <tableViewController id="7BM-N8-yUy" customClass="TimeTableViewController" customModule="DnevnikAppSwift" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7rn-mT-zup">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <view key="tableFooterView" contentMode="scaleToFill" id="NTv-v3-cO7">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </view>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell1" id="JFd-rH-beQ">
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JFd-rH-beQ" id="RZo-LF-g69">
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="7BM-N8-yUy" id="xKZ-pW-99l"/>
-                            <outlet property="delegate" destination="7BM-N8-yUy" id="AIz-2b-OKp"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="wI8-mw-Ucz">
-                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="FWj-sc-zoG"/>
-                    </navigationItem>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-                    <connections>
-                        <outlet property="sidebarButton" destination="FWj-sc-zoG" id="aof-Qp-dNp"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7we-Oc-dVn" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="141" y="905"/>
+            <point key="canvasLocation" x="-272" y="1581"/>
         </scene>
         <!--О приложении-->
         <scene sceneID="1LI-bp-iKa">
@@ -288,7 +295,7 @@
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="312" translatesAutoresizingMaskIntoConstraints="NO" id="9tK-pi-RHW">
                                 <rect key="frame" x="4" y="72" width="312" height="370"/>
-                                <mutableString key="text">На текущий момент в приложении реализован просмотр информации об уроках, включая просмотр подробностей о каждом уроке: домашние задания, оценки, информация о присутствии, и т.д.  Исправлено: 1. Вылет из приложения по истечении срока действия куки. 
+                                <string key="text">На текущий момент в приложении реализован просмотр информации об уроках, включая просмотр подробностей о каждом уроке: домашние задания, оценки, информация о присутствии, и т.д.  Исправлено: 1. Вылет из приложения по истечении срока действия куки. 
 Добавлено:
 1. Навигация на прошлую/следующую неделю по дневнику (прям нужно).
 2. Доработано представление с информацией об уроке. Кроме всего прочего, обнаружилось, что за один урок может быть как больше одной оценки, так и больше одного домашнего задания. Теперь все отображается корректно.
@@ -300,7 +307,7 @@
 1. Хранение данных в локальной базе, чтобы при каждом обращении к страницам с информацией не расходовался интернет-трафик.
 2. Push-уведомления о различных событиях (окончание уроков, новые оценки, новые личные сообщения)
 
-Прошу присылать мне сообщения об ошибках и любые пожелания по работе приложения любым доступным способом.</mutableString>
+Прошу присылать мне сообщения об ошибках и любые пожелания по работе приложения любым доступным способом.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -318,7 +325,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WCe-Z8-lE9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="564" y="905"/>
+            <point key="canvasLocation" x="141" y="1573"/>
         </scene>
         <!--Login Navigation Controller-->
         <scene sceneID="kHJ-cX-J0E">
@@ -434,107 +441,6 @@
             </objects>
             <point key="canvasLocation" x="141" y="-441"/>
         </scene>
-        <!--Lesson Details Controller-->
-        <scene sceneID="4gd-7M-2ZM">
-            <objects>
-                <viewController id="xuR-Aj-hhr" customClass="LessonDetailsController" customModule="DnevnikAppSwift" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="1uh-WJ-olJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="Hwl-w3-r0S"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="jNj-V5-itt">
-                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HQl-0t-nHI">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Детали" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r8a-aL-tMx">
-                                        <rect key="frame" x="4" y="8" width="311.5" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pkf-ir-93n">
-                                        <rect key="frame" x="4" y="37" width="312" height="100"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Кабинет" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zy6-dM-rWh">
-                                                <rect key="frame" x="8" y="8" width="100" height="21"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.32549019607843138" green="0.32549019607843138" blue="0.32549019607843138" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="202" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Uj-RE-fMu">
-                                                <rect key="frame" x="166" y="7" width="138" height="21"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AGY-Mw-mCd">
-                                                <rect key="frame" x="166" y="31" width="138" height="61"/>
-                                                <attributedString key="attributedText">
-                                                    <fragment content="Что изображают на карте">
-                                                        <attributes>
-                                                            <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                            <font key="NSFont" size="10" name="HelveticaNeue"/>
-                                                            <paragraphStyle key="NSParagraphStyle" alignment="right" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                        </attributes>
-                                                    </fragment>
-                                                </attributedString>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Тема урока" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L6R-bJ-tyg">
-                                                <rect key="frame" x="8" y="51" width="100" height="21"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" red="0.32549019607843138" green="0.32549019607843138" blue="0.32549019607843138" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Домашние задания" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hx0-Fm-OsS">
-                                        <rect key="frame" x="8" y="145" width="155.5" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="swq-Ii-sSO">
-                                        <rect key="frame" x="4" y="174" width="312" height="50"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="efg-UE-fcw">
-                                                <rect key="frame" x="8" y="0.0" width="296" height="50"/>
-                                                <attributedString key="attributedText">
-                                                    <fragment content="Label">
-                                                        <attributes>
-                                                            <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                            <font key="NSFont" size="12" name="HelveticaNeue"/>
-                                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                        </attributes>
-                                                    </fragment>
-                                                </attributedString>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    </view>
-                                </subviews>
-                            </scrollView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-                    <connections>
-                        <outlet property="homeWorkLabel" destination="efg-UE-fcw" id="wZj-LH-8hC"/>
-                        <outlet property="homeWorkView" destination="swq-Ii-sSO" id="v2i-wI-fL2"/>
-                        <outlet property="roomLabel" destination="7Uj-RE-fMu" id="WTq-v3-YoM"/>
-                        <outlet property="subjectView" destination="Pkf-ir-93n" id="Q1U-EK-0V7"/>
-                        <outlet property="themeLabel" destination="AGY-Mw-mCd" id="5bF-ha-Wnj"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="JEa-KP-5SG" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1166" y="223"/>
-        </scene>
         <!--Lesson Table Controller-->
         <scene sceneID="dcc-Pi-h5o">
             <objects>
@@ -647,7 +553,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QNc-3Q-vPP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1552" y="223"/>
+            <point key="canvasLocation" x="564" y="223"/>
         </scene>
     </scenes>
     <resources>
