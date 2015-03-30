@@ -40,53 +40,49 @@ class LessonTableController : UITableViewController {
                 let fullHTML = NSString(data: data, encoding: NSUTF8StringEncoding)
                 
                 let photoPatt = "<h3>\\s*?Учитель\\s*?</h3>.*?img src=\"(.*?)\""
-                let photoArr = self.parseString(fullHTML!, patt: photoPatt)
-                if photoArr.count > 0 {
-                    tmpLesson?.teacherPhotoUrl = photoArr[0].stringByReplacingOccurrencesOfString(".s.", withString: ".l.", options: nil, range: nil)
-                }
+                let photoUrl = self.regManager.getFirstMatch(fullHTML!, pattern: photoPatt)
+                tmpLesson?.teacherPhotoUrl = photoUrl.stringByReplacingOccurrencesOfString(".s.", withString: ".l.", options: nil, range: nil)
 
-                let teacherPatt = "<a\\s*?href=.*?class=\"u\">(.*?)</a>"
-                let teacherArr = self.parseString(fullHTML!, patt: teacherPatt)
-                if teacherArr.count > 0 {
-                    tmpLesson?.teacher = teacherArr[0]
-                }
+                let teacherPatt = "<.*?class=\"u\">(.*?)</.*?>.*?<p></p>"
+                let teacherName = self.regManager.getFirstMatch(fullHTML!, pattern: teacherPatt)
+                tmpLesson?.teacher = teacherName
                 
                 var detailsBlock : [String : String] = [:]
                 
                 let detailsBlockPatt = "<dl\\s*?class=\"info\">.*?</dl>"
-                let detailsBlockStr = self.parseString(fullHTML!, patt: detailsBlockPatt, full: true)[0]
+                let detailsBlockStr = self.regManager.getFirstString(fullHTML!, pattern: detailsBlockPatt)
                 
                 let detailsIndexPatt = "<dt>(.*?)</dt>"
-                let detailsIndexArr = self.parseString(detailsBlockStr, patt: detailsIndexPatt)
-                if detailsIndexArr.count > 0 {
-                    for ind in detailsIndexArr {
-                        detailsBlock.updateValue("", forKey: ind)
-                    }
+                let detailsIndexArr = self.regManager.getMatches(detailsBlockStr, pattern: detailsIndexPatt)
+                for ind in detailsIndexArr {
+                    detailsBlock.updateValue("", forKey: ind)
                 }
                 
                 for key in detailsBlock.keys {
                     var str = ""
                     let ddPatt = key + ".*?<dd>\\s*?(\\S.*?)\\s*?</dd>"
-                    let ddArr = self.parseString(detailsBlockStr, patt: ddPatt)
-                    if ddArr.count > 0 {
-                        str = ddArr[0]
-                        let strongPatt = "<strong.*?>\\s*?(.*?)\\s*?</strong>"
-                        let strongArr = self.parseString(str, patt: strongPatt)
-                        if strongArr.count > 0 {
-                            str = strongArr[0]
-                            let aPatt = "<a\\s*?href=.*?>\\s*?(.*?)\\s*?</a>"
-                            let aArr = self.parseString(str, patt: aPatt)
-                            if aArr.count > 0 {
-                                str = aArr[0]
-                            }
-                        }
+                    var ddStr = self.regManager.getFirstMatch(detailsBlockStr, pattern: ddPatt)
+                    
+                    // Детали хранятся внутри тега <strong>
+                    let strongPatt = "<strong.*?>\\s*?(.*?)\\s*?</strong>"
+                    let strongStr = self.regManager.getFirstMatch(ddStr, pattern: strongPatt)
+                    if strongStr != "" {
+                        ddStr = strongStr
                     }
-                    str = str
+                    
+                    // Бывает, что внутри тега <strong> еще и тег <a>
+                    let aPatt = "<a\\s*?href=.*?>\\s*?(.*?)\\s*?</a>"
+                    let aStr = self.regManager.getFirstMatch(ddStr, pattern: aPatt)
+                    if aStr != "" {
+                        ddStr = aStr
+                    }
+
+                    ddStr = ddStr
                         .stringByReplacingOccurrencesOfString("&nbsp;", withString: " ", options: nil, range: nil)
                         .stringByReplacingOccurrencesOfString("&amp;#171;", withString: "\"", options: nil, range: nil)
                         .stringByReplacingOccurrencesOfString("&amp;#187;", withString: "\"", options: nil, range: nil)
 
-                    detailsBlock.updateValue(str, forKey: key)
+                    detailsBlock.updateValue(ddStr, forKey: key)
                 }
                 tmpLesson?.details = detailsBlock
                 //println("indexArr : \(detailsBlock)")
@@ -97,11 +93,13 @@ class LessonTableController : UITableViewController {
                 let availCommPatt = "Присутствие на уроке.*?</h3>.*?<td class=\"tac\".*?>(.*?)</td>.*?Домашние задания"
                 tmpLesson?.avail.comment = self.regManager.getFirstMatch(fullHTML!, pattern: availCommPatt)
 
-                let hwBlockPatt = "Домашние задания.*?</h3>.*?</strong>.*?</td>.*?<td>(.*?)</td>.*?Оценки"
+                let hwBlockPatt = "Домашние задания</h3>.*?</strong>.*?</td>.*?<td>(.*?)</td>.*?Оценки"
                 let hwBlockStr = self.regManager.getFirstString(fullHTML!, pattern: hwBlockPatt)
+                //println("hwBlockStr: \(hwBlockStr)")
 
                 let homeWorkPatt = "<td>(.*?)</td>"
                 var homeWorkArr = self.regManager.getMatches(hwBlockStr, pattern: homeWorkPatt)
+                //println("homeWorkArr: \(homeWorkArr)")
                 if homeWorkArr.count > 0 {
                     for i in 0..<homeWorkArr.count {
                         tmpLesson?.homeworks[i].text = homeWorkArr[i]
@@ -117,24 +115,10 @@ class LessonTableController : UITableViewController {
                 
                 let marksBlockPatt = "Оценки за работу на уроке</h3>.*?class=\"mark\\s*m\\D\">.*?</div>\\s*?</div>\\s*?</div>\\s*?</div>\\s*?</div>"
                 let marksBlockStr = self.regManager.getFirstString(fullHTML!, pattern: marksBlockPatt)
-                //self.parseString(fullHTML!, patt: marksBlockPatt, full: true)[0]
-                //println("BLOCK: \(marksBlockStr)")
-                
-                /*
-                let marksPatt = "class=\"mark\\s*m\\D\">(\\d)</span>"
-                let marksArr = self.parseString(marksBlockStr, patt: marksPatt)
-                if marksArr.count > 0 {
-                    for i in 0..<marksArr.count {
-                        //tmpLesson?.marks.append(marksArr[i])
-                        //tmpLesson?.marksComments.append("-")
-                    }
-                }
-                */
-                //println("count: \(marksArr.count)")
-                //println("marks: \(tmpLesson?.marks), comm: \(tmpLesson?.marksComments)")
 
                 let marksCommPatt = "<div class=\"light\">(.*?)</div>"
-                let marksCommArr = self.parseString(marksBlockStr, patt: marksCommPatt)
+                let marksCommArr = self.regManager.getMatches(marksBlockStr, pattern: marksCommPatt)
+                //self.parseString(marksBlockStr, patt: marksCommPatt)
                 var cnt = 0
                 if marksCommArr.count > 0 {
                     for i in 0..<marksCommArr.count {
@@ -145,10 +129,10 @@ class LessonTableController : UITableViewController {
                 }
                 // специально для нашей англичанки
                 let marksCommPatt2 = "<div class=\"light\">.*?</div>(.*?)</td>"
-                let marksCommArr2 = self.parseString(marksBlockStr, patt: marksCommPatt2)
+                let marksCommArr2 = self.regManager.getMatches(marksBlockStr, pattern: marksCommPatt2)
+                //self.parseString(marksBlockStr, patt: marksCommPatt2)
                 if marksCommArr2.count > 0 && cnt < tmpLesson?.marksNew.count {
                     for i in 0..<marksCommArr2.count {
-                        //tmpLesson?.marksComments.append(marksCommArr2[i])
                         tmpLesson?.marksNew[i + cnt].comment = marksCommArr2[i]
                     }
                 }

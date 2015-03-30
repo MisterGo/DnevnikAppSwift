@@ -117,11 +117,12 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
 //        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {response,data,error in
             if data != nil {
                 let fullStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                let patt = "<a\\s*?href=\"http://dnevnik.ru/user/user.aspx.*?\".*?>(.*?)</a>"
+                //println("fullStr: \(fullStr)")
+                let patt = "<a class=\"header-profile__name\".*?href=\"http://dnevnik.ru/user/user.aspx.*?\".*?>(.*?)</a>"
                 
                 let regManager = RegexManager(patt)
                 let fullNameArr = regManager.test(fullStr!)
-                //println("fname = \(fullNameArr)")
+                println("fname = \(fullNameArr)")
                 fullNameText = regManager.test(fullStr!)[0] as NSString
                 dispatch_async(dispatch_get_main_queue(), {
                     self.fullnameLabel.text = fullNameText
@@ -142,10 +143,22 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
         super.viewDidLoad()
         self.title = "DnevnikApp"
         
+        //
+//        var localNotification:UILocalNotification = UILocalNotification()
+//        localNotification.alertAction = "Testing notifications on iOS8"
+//        localNotification.alertBody = "Woww it works!!"
+//        localNotification.soundName = UILocalNotificationDefaultSoundName
+//        localNotification.fireDate = NSDate(timeIntervalSinceNow: 20)
+//        UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
+        //
+        
+        println("VERSION: \(UIDevice.currentDevice().model)")
+        
         setupMenuButtonAction()
         
         self.fullnameLabel.font = UIFont.boldSystemFontOfSize(18)
         self.fullnameLabel.textColor = UIColor(red: 125/255, green: 184/255, blue: 45/255, alpha: 1)
+        self.fullnameLabel.text = ""
         
         if Global.signedIn {
             //getFullName()

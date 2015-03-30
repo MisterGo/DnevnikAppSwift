@@ -17,6 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        //registering for sending user various kinds of notifications
+//        application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: .Sound | .Alert | .Badge, categories: nil))
+        
+//        application.registerUserNotificationSettings(UIUserNotificationSettings(UIUserNotificationType.Sound |
+//            UIUserNotificationType.Alert |
+//            UIUserNotificationType.Badge) //, categories: nil)
+        //
+        
         let cookieStor = NSHTTPCookieStorage.sharedHTTPCookieStorage()
         //println("CookieStor: \(cookieStor.description)")
         let cookies = cookieStor.cookies as [NSHTTPCookie]

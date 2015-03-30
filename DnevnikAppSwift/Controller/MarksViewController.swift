@@ -18,6 +18,7 @@ class MarksViewController : UITableViewController {
     
     var marksDays : [DnevnikDay] = []
     
+    var loaded = false
     let regManager = RegManager()
     var prevURL = ""
     var nextURL = ""
@@ -29,7 +30,7 @@ class MarksViewController : UITableViewController {
         if (revealViewController() != nil) {
             sidebarButton.target = revealViewController()
             sidebarButton.action = "revealToggle:"
-            //view.addGestureRecognizer(revealViewController().panGestureRecognizer())
+            view.addGestureRecognizer(revealViewController().panGestureRecognizer())
         }
     }
     /*
@@ -64,9 +65,10 @@ class MarksViewController : UITableViewController {
         // дата с сайта выглядит так: Понедельник, 1&nbsp;декабря&nbsp;2014
         // сначала число
         day = self.regManager.getFirstMatch(rusStr, pattern: ",\\s(\\d+?)&nbsp")
-        if countElements(day) == 1 {
-            day = "0" + day
-        }
+        day = String(format: "%02d", day.toInt()!)
+        //if countElements(day) == 1 {
+        //    day = "0" + day
+        //}
         // теперь месяц
         let monthRus = self.regManager.getFirstMatch(rusStr, pattern: "&nbsp;(.*?)&nbsp;")
         for i in 1...monthDict.count {
@@ -140,7 +142,7 @@ class MarksViewController : UITableViewController {
                         dnevnikDay!.lessons.append(lesson)
                         
                         // теперь поищем оценки за урок
-                        let marksArr = self.regManager.getMatches(lessonBigStr, pattern: "class=\"mark\\s*m\\D\">(\\d)</span>")
+                        let marksArr = self.regManager.getMatches(lessonBigStr, pattern: "class=\"mark\\s*m\\D\">(\\d.*?)</span>")
                         
                         for mStr in marksArr {
                             var mark = LessonMark(mark: mStr, comment: "")
@@ -148,7 +150,7 @@ class MarksViewController : UITableViewController {
                         }
                         
                         // Домашнее задание
-                        let homeWorkPatt = "<a\\s*href=\"http://children.dnevnik.ru/homework.aspx.*?<span class=\"breakword\">(.*?)</span>"
+                        let homeWorkPatt = "<a\\s*href=\"http://\\D*?\\.dnevnik\\.ru/homework\\.aspx.*?<span class=\"breakword\">(.*?)</span>"
                         let homeWorkArr = self.regManager.getMatches(lessonBigStr, pattern: homeWorkPatt)
                         for hwStr in homeWorkArr {
                             //println("HW: \(hwStr)")
@@ -174,92 +176,8 @@ class MarksViewController : UITableViewController {
                     
                 }
                 
-/*
-                /////////////////////////////////////////////////////////////////
-                //  OLD
-                /////////////////////////////////////////////////////////////////
-                let datesArr = self.regManager.getMatches(fullHTML!, pattern: dayPatt)
-                //self.parseString(fullHTML!, patt: dayPatt)
-                if datesArr.count > 0 {
-                    for i in 0...datesArr.count - 1 {
-                        
-                        let dayBigStr = regManager.getStrings(fullHTML!, pattern: dayPatt)[i]
-                        //self.parseString(fullHTML!, patt: dayPatt, full: true)[i]
-                        //regManager.resultStr[i] as String
-                        let lessonPatt = "<tr>\\s*<td\\s*class=\"s2\".*?&lesson=\\d*?\">(.*?)</a>.*?</td></tr>"
-                        let lessonsArr = regManager.getMatches(dayBigStr, pattern: lessonPatt)
-                        //self.parseString(dayBigStr, patt: lessonPatt)
-                        
-                        if lessonsArr.count > 0 {
-                            // добавим день с уроками в массив
-                            let dateStr = self.makeDate(datesArr[i])
-                            dnevnikDay = DnevnikDay(date: dateStr)
-                            
-                            //println("DATE: : \(regArr[i]), \(dateStr)")
-                            //println("lessons count: \(lessonsArr.count)")
-                            for i in 0...lessonsArr.count - 1 {
-                                // добавим урок в дату
-                                var lesson = DnevnikLesson(name: lessonsArr[i])
-                                dnevnikDay!.lessons.append(lesson)
-                                
-                                // теперь поищем оценки за урок
-                                let lessonBigStr = regManager.getStrings(dayBigStr, pattern: lessonPatt)[i]
-                                //self.parseString(dayBigStr, patt: lessonPatt, full: true)[i]
-                                //let marksPatt = "class=\"mark\\s*m\\D\">(\\d)</span>"
-                                let marksArr = regManager.getMatches(lessonBigStr, pattern: "class=\"mark\\s*m\\D\">(\\d)</span>")
-                                //self.parseString(lessonBigStr, patt: marksPatt)
-                                
-                                for mStr in marksArr {
-                                    var mark = LessonMark(mark: mStr, comment: "")
-                                    lesson.marksNew.append(mark)
-                                }
-                                //println("LESSON: \(lesson.subjectName), marks: \(lesson.marksNew)")
-                                
-                                if marksArr.count > 0 {
-                                    for i in 0...marksArr.count - 1 {
-                                        lesson.marks.append(marksArr[i])
-                                    }
-                                }
-                                
-                                // Домашнее задание
-                                let homeWorkPatt = "<a\\s*href=\"http://children.dnevnik.ru/homework.aspx"
-                                let homeWorkArr = self.parseString(lessonBigStr, patt: homeWorkPatt, full: true)
-                                if homeWorkArr.count > 0 {
-                                    lesson.homework = true
-                                }
-                                
-                                // Посещаемость
-                                let availPatt = "<td class=\"tac lpp ls(\\D)"
-                                let availArr = self.parseString(lessonBigStr, patt: availPatt)
-                                if availArr.count > 0 {
-                                    lesson.availability = availArr[0]
-                                }
-                                
-                                // URL
-                                let urlPatt = "href=\"(http://\\D*?\\.dnevnik\\.ru/lesson\\.aspx.*?)\">"
-                                let urlArr = self.parseString(lessonBigStr, patt: urlPatt)
-                                if urlArr.count > 0 {
-                                    lesson.url = urlArr[0]
-                                }
-                                
-                                
-                                //println("lesson: \(lesson.subjectName), url: \(lesson.url)")
-                            }
-                            dispatch_async(dispatch_get_main_queue(), {
-                                //self.marksDays.append(dnevnikDay!)
-                                
-                                //actInd.stopAnimating()
-                                //self.tableView.hidden = false
-                                //self.tableView.reloadData()
-                            })
-
-                        }
-                    }
-                }
-*/
-
                 // Prev week
-                let prevPatt = "<div class=\"player\">.*?<li class=\"pB\">\\s*?<a href=\"(.*?)\" title=\"Предыдущая неделя\">"
+                let prevPatt = "<div class=\"tabs\">.*?<div class=\"player\">.*?<li class=\"pB\">\\s*?<a href=\"(.*?)\" title=\"Предыдущая неделя\">"
                 let prevURLTmp = self.regManager.getFirstMatch(fullHTML!, pattern: prevPatt)
                 // Next week
                 let nextPatt = "<li class=\"pF\">\\s*?<a href=\"(.*?)\" title=\"Следующая неделя\">"
@@ -267,12 +185,14 @@ class MarksViewController : UITableViewController {
                 // This week
                 let thisPatt = "Следующая неделя.*?<li class=\".*?first link\">\\s*?<a href=\"(.*?)\">Текущая неделя"
                 let thisURLTmp = self.regManager.getFirstMatch(fullHTML!, pattern: thisPatt)
+                //println("prevURL: \(prevURLTmp), encoded: \(NSString(CString: prevURLTmp, encoding: NSUTF8StringEncoding))")
 
                 dispatch_async(dispatch_get_main_queue(), {
                     self.prevURL = prevURLTmp.stringByReplacingOccurrencesOfString("&amp;", withString: "&", options: nil, range: nil)
                     self.nextURL = nextURLTmp.stringByReplacingOccurrencesOfString("&amp;", withString: "&", options: nil, range: nil)
                     self.thisURL = thisURLTmp.stringByReplacingOccurrencesOfString("&amp;", withString: "&", options: nil, range: nil)
                     //self.marksDays.append(dnevnikDay!)
+                    self.loaded = true
                     self.actInd.stopAnimating()
                     self.refreshControl?.endRefreshing()
                     self.tableView.reloadData()
@@ -295,7 +215,6 @@ class MarksViewController : UITableViewController {
         setupMenuButtonAction()
         // Установим footerView пустым, чтобы при загрузке не показывало пустые ячейки
         self.tableView.tableFooterView = UIView()
-        //self.tableView.tableHeaderView = UIView()
         
         self.refreshControl = UIRefreshControl()
         self.tableView.addSubview(self.refreshControl!)
@@ -303,13 +222,22 @@ class MarksViewController : UITableViewController {
     }
     
     func refresh(sender : AnyObject) {
-        actInd.center = self.tableView.center
-        actInd.hidesWhenStopped = true
-        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
-        view.addSubview(actInd)
-        actInd.startAnimating()
+        if marksDays.count == 0 {
+            //self.marksDays = []
+            actInd.center = self.tableView.center
+            actInd.hidesWhenStopped = true
+            actInd.hidden = false
+            actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+            view.addSubview(actInd)
+            actInd.startAnimating()
+        }
         parsePage()
+    }
+    
+    @IBAction func refreshButtonPressed(sender: AnyObject) {
+        self.marksDays = []
         self.tableView.reloadData()
+        self.refresh(self)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -317,6 +245,7 @@ class MarksViewController : UITableViewController {
         if marksDays.count == 0 {
             actInd.center = self.tableView.center
             actInd.hidesWhenStopped = true
+            actInd.hidden = false
             actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
             view.addSubview(actInd)
             actInd.startAnimating()
@@ -335,7 +264,10 @@ class MarksViewController : UITableViewController {
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return self.marksDays.count
+        if loaded {
+            return self.marksDays.count
+        }
+        return 0
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -376,6 +308,7 @@ class MarksViewController : UITableViewController {
 
     func prevButtonPressed(sender: AnyObject!) {
         Global.marksUrl = self.prevURL
+        //println("prev: \(Global.marksUrl)")
         self.marksDays = []
         self.tableView.reloadData()
         self.refresh(self)

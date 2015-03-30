@@ -9,5 +9,9 @@
 import Foundation
 
 class DnevnikWeek {
-    
+    var header = ""
+    var prevURL = ""
+    var nextURL = ""
+    var thisURL = ""
+    var days : [DnevnikDay] = []
 }
