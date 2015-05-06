@@ -37,20 +37,21 @@ class LessonTableController : UITableViewController {
                 //sleep(1)
                 var tmpLesson = self.lesson
                 
-                let fullHTML = NSString(data: data, encoding: NSUTF8StringEncoding)
+                let fullHTML = NSString(data: data, encoding: NSUTF8StringEncoding) as! String
                 
                 let photoPatt = "<h3>\\s*?Учитель\\s*?</h3>.*?img src=\"(.*?)\""
-                let photoUrl = self.regManager.getFirstMatch(fullHTML!, pattern: photoPatt)
+                let photoUrl = self.regManager.getFirstMatch(fullHTML, pattern: photoPatt)
                 tmpLesson?.teacherPhotoUrl = photoUrl.stringByReplacingOccurrencesOfString(".s.", withString: ".l.", options: nil, range: nil)
 
                 let teacherPatt = "<.*?class=\"u\">(.*?)</.*?>.*?<p></p>"
-                let teacherName = self.regManager.getFirstMatch(fullHTML!, pattern: teacherPatt)
+                let teacherName = self.regManager.getFirstMatch(fullHTML, pattern: teacherPatt)
                 tmpLesson?.teacher = teacherName
+                //println("teacher: \(teacherName)")
                 
                 var detailsBlock : [String : String] = [:]
                 
                 let detailsBlockPatt = "<dl\\s*?class=\"info\">.*?</dl>"
-                let detailsBlockStr = self.regManager.getFirstString(fullHTML!, pattern: detailsBlockPatt)
+                let detailsBlockStr = self.regManager.getFirstString(fullHTML, pattern: detailsBlockPatt)
                 
                 let detailsIndexPatt = "<dt>(.*?)</dt>"
                 let detailsIndexArr = self.regManager.getMatches(detailsBlockStr, pattern: detailsIndexPatt)
@@ -89,12 +90,12 @@ class LessonTableController : UITableViewController {
                 //println("block: \(detailsBlockStr)")
                 
                 let availPatt = "Присутствие на уроке.*?</h3>.*?<td class=\"tac ls\\D\".*?>(.*?)</td>.*?Домашние задания"
-                tmpLesson?.avail.state = self.regManager.getFirstMatch(fullHTML!, pattern: availPatt)
+                tmpLesson?.avail.state = self.regManager.getFirstMatch(fullHTML, pattern: availPatt)
                 let availCommPatt = "Присутствие на уроке.*?</h3>.*?<td class=\"tac\".*?>(.*?)</td>.*?Домашние задания"
-                tmpLesson?.avail.comment = self.regManager.getFirstMatch(fullHTML!, pattern: availCommPatt)
+                tmpLesson?.avail.comment = self.regManager.getFirstMatch(fullHTML, pattern: availCommPatt)
 
                 let hwBlockPatt = "Домашние задания</h3>.*?</strong>.*?</td>.*?<td>(.*?)</td>.*?Оценки"
-                let hwBlockStr = self.regManager.getFirstString(fullHTML!, pattern: hwBlockPatt)
+                let hwBlockStr = self.regManager.getFirstString(fullHTML, pattern: hwBlockPatt)
                 //println("hwBlockStr: \(hwBlockStr)")
 
                 let homeWorkPatt = "<td>(.*?)</td>"
@@ -114,7 +115,7 @@ class LessonTableController : UITableViewController {
                 }
                 
                 let marksBlockPatt = "Оценки за работу на уроке</h3>.*?class=\"mark\\s*m\\D\">.*?</div>\\s*?</div>\\s*?</div>\\s*?</div>\\s*?</div>"
-                let marksBlockStr = self.regManager.getFirstString(fullHTML!, pattern: marksBlockPatt)
+                let marksBlockStr = self.regManager.getFirstString(fullHTML, pattern: marksBlockPatt)
 
                 let marksCommPatt = "<div class=\"light\">(.*?)</div>"
                 let marksCommArr = self.regManager.getMatches(marksBlockStr, pattern: marksCommPatt)
@@ -263,60 +264,60 @@ class LessonTableController : UITableViewController {
         switch indexPath.section {
         case find(lessonSections, "Учитель")! :
             var cellIdentifier = "TeacherCell"
-            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
-            let newCell = cell as TeacherCell
+            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! LessonTableViewCell
+            let newCell = cell as! TeacherCell
             newCell.configureFor(lesson!)
             //return cell as TeacherCell
             return newCell
         case find(lessonSections, "Детали")! :
             var cellIdentifier = "LessonDetailCell"
-            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! LessonTableViewCell
             
             let details = self.lesson?.details
             let keys = details?.keys.array as [String]!
             let values = details?.values.array as [String]!
             let key = keys[indexPath.row]
             
-            var newCell = cell as LessonDetailCell
+            var newCell = cell as! LessonDetailCell
             newCell.configureFor(keys[indexPath.row], value: values[indexPath.row])
             return newCell
         case find(lessonSections, "Домашние задания")! :
             var cellIdentifier = "OtherDetail"
-            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! LessonTableViewCell
             
             let hwState = self.lesson?.homeworks[indexPath.row].state
             let hwText = self.lesson?.homeworks[indexPath.row].text
             
-            var newCell = cell as OtherDetailCell
+            var newCell = cell as! OtherDetailCell
             //newCell.configureFor(lesson!, key: lesson!.homeworkState, val: lesson!.homeworkText, type: .homeWorkType)
             newCell.configureFor(lesson!, key: hwState!, val: hwText!, type: .homeWorkType)
             return newCell
         case find(lessonSections, "Оценки")! :
             var cellIdentifier = "OtherDetail"
-            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! LessonTableViewCell
             
             let mark = self.lesson?.marksNew[indexPath.row].mark //self.lesson?.marks[indexPath.row]
             let markComm = self.lesson?.marksNew[indexPath.row].comment //self.lesson?.marksComments[indexPath.row]
             
-            var newCell = cell as OtherDetailCell
+            var newCell = cell as! OtherDetailCell
             newCell.configureFor(lesson!, key: mark!, val: markComm!, type: .marksType)
             return newCell
         case find(lessonSections, "Присутствие на уроке")! :
             var cellIdentifier = "OtherDetail"
-            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! LessonTableViewCell
             
             let avail = self.lesson?.avail.state    //self.lesson?.availState
             let availComm = self.lesson?.avail.comment    //self.lesson?.availComment
             
-            var newCell = cell as OtherDetailCell
+            var newCell = cell as! OtherDetailCell
             newCell.configureFor(lesson!, key: avail!, val: availComm!, type: .availType)
             return newCell
             
             
         default :
             var cellIdentifier = "OtherDetail"
-            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonTableViewCell
-            var newCell = cell as OtherDetailCell
+            var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! LessonTableViewCell
+            var newCell = cell as! OtherDetailCell
             newCell.configureFor(lesson!, key: "--", val: "---", type: .availType)
             return newCell
         }

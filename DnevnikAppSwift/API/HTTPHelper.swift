@@ -33,7 +33,7 @@ class HTTPHelper {
             { (task: NSURLSessionDataTask!, responseObject: AnyObject!) in
                 self._httpResponse = task.response as? NSHTTPURLResponse
                 if self._httpResponse?.statusCode == 200 {
-                    self._fullHtml = NSString(data: responseObject as NSData, encoding: NSUTF8StringEncoding)
+                    self._fullHtml = NSString(data: responseObject as! NSData, encoding: NSUTF8StringEncoding)
                     
                     //let patt = "\\s*name=\"(xss)\"\\s*value=\"(.*?)\".*?/>"
                     //let xss = patt.exec(bigStr!)
@@ -77,11 +77,11 @@ class HTTPHelper {
             self._urlString,
             parameters: self._params,
             success: { (task: NSURLSessionDataTask!, responseObject: AnyObject!) in
-                self._httpResponse = task.response as NSHTTPURLResponse?
+                self._httpResponse = task.response as! NSHTTPURLResponse?
                 if self._httpResponse?.statusCode == 200 {
                     //println("POST OK -> \(httpResponse.description)\n")
                     //println("------------\n")
-                    self._fullHtml = NSString(data: responseObject as NSData, encoding: NSUTF8StringEncoding)
+                    self._fullHtml = NSString(data: responseObject as! NSData, encoding: NSUTF8StringEncoding)
                     //                    println("OBJECT: \(bigStr)\n")
                 } else {
                     println("POST Error -> Code: \(self._httpResponse?.statusCode), Msg: \(responseObject)")

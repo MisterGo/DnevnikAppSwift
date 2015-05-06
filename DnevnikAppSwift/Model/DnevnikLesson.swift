@@ -25,7 +25,7 @@ struct LessonAvailability {
 class DnevnikLesson {
     let lessonSections = ["Учитель", "Детали", "Присутствие на уроке", "Домашние задания", "Оценки"]
     
-    let subject : DnevnikSubject?
+    //let subject : DnevnikSubject?
     let subjectName : String!  // в будущем вместо subjectName будет ссылка на DnevnikSubject
     var number : Int = 0
     var availability : String = "" // color

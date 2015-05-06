@@ -48,7 +48,7 @@ class SidebarViewController : UITableViewController {
 
         cellIdentifier = menuItems[indexPath.row]
         
-        var cell : UITableViewCell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as UITableViewCell
+        var cell : UITableViewCell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! UITableViewCell
         
         cell.backgroundColor = UIColor.darkGrayColor()
         //cell.textLabel?.textColor = UIColor.whiteColor()

@@ -72,11 +72,11 @@ class LessonDetailsController : UIViewController {
                 if data != nil {
                     //println("data <> nil : \(NSDate())")
                     //sleep(1)
-                    let fullStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+                    let fullStr = NSString(data: data, encoding: NSUTF8StringEncoding) as! String
                     //println("fullStr ready: \(NSDate())")
                     //sleep(1)
                     let roomPatt = "<dt>\\s*?Кабинет:\\s*?</dt>\\s*?<dd>\\s*(.*?)\\s*?</dd>"
-                    var roomArr = self.parseString(fullStr!, patt: roomPatt)
+                    var roomArr = self.parseString(fullStr, patt: roomPatt)
                     if roomArr.count > 0 {
                         self.lesson?.room = roomArr[0]
                         //dispatch_async(dispatch_get_main_queue(), {
@@ -87,7 +87,7 @@ class LessonDetailsController : UIViewController {
                     //sleep(1)
 
                     let themePatt = "<dt>\\s*?Тема\\s*?урока:\\s*?</dt>\\s*?<dd>\\s*?(.*?)\\s*?</dd>"
-                    var themeArr = self.parseString(fullStr!, patt: themePatt)
+                    var themeArr = self.parseString(fullStr, patt: themePatt)
                     if themeArr.count > 0 {
                         var str = themeArr[0].stringByReplacingOccurrencesOfString("&amp;#171;", withString: "\"", options: nil, range: nil)
                         str = str.stringByReplacingOccurrencesOfString("&amp;#187;", withString: "\"", options: nil, range: nil)
@@ -101,7 +101,7 @@ class LessonDetailsController : UIViewController {
                     //sleep(1)
                     
                     let homeWorkPatt = "</strong>\\s*?</td>\\s*?<td>(.*?)</td>"
-                    var homeWorkArr = self.parseString(fullStr!, patt: homeWorkPatt)
+                    var homeWorkArr = self.parseString(fullStr, patt: homeWorkPatt)
                     if homeWorkArr.count > 0 {
                         self.lesson?.homeworkText = homeWorkArr[0]
                     }
@@ -130,15 +130,15 @@ class LessonDetailsController : UIViewController {
         var error : NSErrorPointer = nil
         var data : NSData = NSURLConnection.sendSynchronousRequest(request, returningResponse: response, error: error)!
         
-        let fullStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+        let fullStr = NSString(data: data, encoding: NSUTF8StringEncoding) as! String
         let roomPatt = "<dt>\\s*?Кабинет:\\s*?</dt>\\s*?<dd>\\s*(.*?)\\s*?</dd>"
-        var roomArr = self.parseString(fullStr!, patt: roomPatt)
+        var roomArr = self.parseString(fullStr, patt: roomPatt)
         if roomArr.count > 0 {
             self.roomLabel.text = roomArr[0]
         }
         
         let themePatt = "<dt>\\s*?Тема\\s*?урока:\\s*?</dt>\\s*?<dd>\\s*?(.*?)\\s*?</dd>"
-        var themeArr = self.parseString(fullStr!, patt: themePatt)
+        var themeArr = self.parseString(fullStr, patt: themePatt)
         if themeArr.count > 0 {
             var str = themeArr[0].stringByReplacingOccurrencesOfString("&amp;#171;", withString: "\"", options: nil, range: nil)
             str = str.stringByReplacingOccurrencesOfString("&amp;#187;", withString: "\"", options: nil, range: nil)
@@ -146,7 +146,7 @@ class LessonDetailsController : UIViewController {
         }
         
         let homeWorkPatt = "</strong>\\s*?</td>\\s*?<td>(.*?)</td>"
-        var homeWorkArr = self.parseString(fullStr!, patt: homeWorkPatt)
+        var homeWorkArr = self.parseString(fullStr, patt: homeWorkPatt)
         if homeWorkArr.count > 0 {
             self.homeWorkLabel.text = homeWorkArr[0]
         }

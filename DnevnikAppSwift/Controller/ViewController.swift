@@ -22,7 +22,7 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
     func saveStoredCookies() -> Void {
         let httpURL = NSURL(string: "http://dnevnik.ru")
         let htpCookies = NSHTTPCookieStorage()
-        var cookies: [NSHTTPCookie] = NSHTTPCookieStorage.sharedHTTPCookieStorage().cookies as [NSHTTPCookie]
+        var cookies: [NSHTTPCookie] = NSHTTPCookieStorage.sharedHTTPCookieStorage().cookies as! [NSHTTPCookie]
         
     }
     
@@ -77,12 +77,12 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
         NSURLConnection.sendAsynchronousRequest(request, queue: queue) {response,data,error in
 //        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {response,data,error in
             if data != nil {
-                let fullHTML = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                let fullHTML = NSString(data: data!, encoding: NSUTF8StringEncoding) as! String
                 //println("DATA: \n \(fullStr!)")
                 //let patt = "\\s*name=\"xss\"\\s*value=\"(.*?)\".*?/>"
                 
                 let regManager = RegManager()   //RegexManager(patt)
-                self.xss = regManager.getFirstMatch(fullHTML!, pattern: "\\s*name=\"xss\"\\s*value=\"(.*?)\".*?/>")
+                self.xss = regManager.getFirstMatch(fullHTML, pattern: "\\s*name=\"xss\"\\s*value=\"(.*?)\".*?/>")
 
                 //self.headerLabel.text = self.xss
                 dispatch_async(dispatch_get_main_queue(), {
@@ -116,17 +116,17 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
         NSURLConnection.sendAsynchronousRequest(request, queue: queue) {response,data,error in
 //        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {response,data,error in
             if data != nil {
-                let fullStr = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                let fullStr = NSString(data: data!, encoding: NSUTF8StringEncoding) as! String
                 //println("fullStr: \(fullStr)")
-                let patt = "<a class=\"header-profile__name\".*?href=\"http://dnevnik.ru/user/user.aspx.*?\".*?>(.*?)</a>"
+                let patt = "<a class=\"header-profile__name\".*?://dnevnik.ru/user/user.aspx.*?\".*?>(.*?)</a>"
                 
                 let regManager = RegexManager(patt)
-                let fullNameArr = regManager.test(fullStr!)
+                let fullNameArr = regManager.test(fullStr)
                 println("fname = \(fullNameArr)")
-                fullNameText = regManager.test(fullStr!)[0] as NSString
+                fullNameText = regManager.test(fullStr)[0] //as NSString
                 dispatch_async(dispatch_get_main_queue(), {
                     self.fullnameLabel.text = fullNameText
-                    self.changeUrls(fullStr!)
+                    self.changeUrls(fullStr)
                     actInd.stopAnimating()
                 })
             }
@@ -214,16 +214,16 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
                     //println("RESPONSE: \(resp.statusCode)")
                 //}
                 //if data != nil {
-                    var fullStr = NSString(data: data, encoding: NSUTF8StringEncoding)
+                    var fullStr = NSString(data: data, encoding: NSUTF8StringEncoding) as! String
                     let patt = "<dt>Я забыл логин"
             
                     let regManager = RegexManager(patt)
-                    let loginErrorArr = parseString(fullStr!, patt: patt, full: true) //regManager.test(fullStr!)
+                    let loginErrorArr = parseString(fullStr, patt: patt, full: true) //regManager.test(fullStr!)
                     if loginErrorArr.count == 0 {
                         
                     // для аккаунтов учеников, оказывается урлы другие
                     // у учеников нет ссылок на children.dnevnik.ru
-                    self.changeUrls(fullStr!)
+                    self.changeUrls(fullStr)
 
                     Global.signedIn = true
                     //println("TimeTable URL: \(Global.timetableUrl)")
@@ -242,7 +242,7 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
         }  else {
             // удалим куки
             let cookieStor = NSHTTPCookieStorage.sharedHTTPCookieStorage()
-            var cookies = cookieStor.cookies as [NSHTTPCookie]
+            var cookies = cookieStor.cookies as! [NSHTTPCookie]
             for c in cookies {
                 if c.domain == ".login.dnevnik.ru" {
                     cookieStor.deleteCookie(c)
@@ -258,7 +258,7 @@ class ViewController: UIViewController, UIViewControllerTransitioningDelegate {/
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         var vc: AnyObject! = storyBoard.instantiateViewControllerWithIdentifier("userNavigationController")
         let rc : SWRevealViewController = self.revealViewController()
-        rc.pushFrontViewController(vc as UINavigationController, animated: true)
+        rc.pushFrontViewController(vc as! UINavigationController, animated: true)
 
         //return
         // Здесь нужно проверить, что логин прошел успешно.

@@ -100,9 +100,9 @@ class MarksViewController : UITableViewController {
                 // Почистим массив дней
                 self.marksDays = []
                 
-                let fullHTML = NSString(data: data!, encoding: NSUTF8StringEncoding)
+                let fullHTML = NSString(data: data!, encoding: NSUTF8StringEncoding) as! String
                 
-                let headerText = self.regManager.getFirstMatch(fullHTML!, pattern: "Следующая неделя.*?<div class=\"inl\">\\s*?<h3>(.*?)</h3>\\s*?<ul class=\"filter\">")
+                let headerText = self.regManager.getFirstMatch(fullHTML, pattern: "Следующая неделя.*?<div class=\"inl\">\\s*?<h3>(.*?)</h3>\\s*?<ul class=\"filter\">")
                 
                 dispatch_async(dispatch_get_main_queue(), {
                     let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width - 100, height: 44))
@@ -117,7 +117,7 @@ class MarksViewController : UITableViewController {
                 })
                 
                 let dayPatt = "<div\\sclass=\"panel blue2 clear\".*?<h3>(.*?)</h3>.*?</div></div></div>"
-                let daysStrings = self.regManager.getStrings(fullHTML!, pattern: dayPatt)
+                let daysStrings = self.regManager.getStrings(fullHTML, pattern: dayPatt)
                 
                 for dayBigStr in daysStrings {
                     let lessonPatt = "<tr>\\s*<td\\s*class=\"s2\".*?&lesson=\\d*?\">(.*?)</a>.*?</td></tr>"
@@ -150,8 +150,9 @@ class MarksViewController : UITableViewController {
                         }
                         
                         // Домашнее задание
-                        let homeWorkPatt = "<a\\s*href=\"http://\\D*?\\.dnevnik\\.ru/homework\\.aspx.*?<span class=\"breakword\">(.*?)</span>"
+                        let homeWorkPatt = "<a\\s*href=\"http\\D*?\\.dnevnik\\.ru/homework\\.aspx.*?<span class=\"breakword\">(.*?)</span>"
                         let homeWorkArr = self.regManager.getMatches(lessonBigStr, pattern: homeWorkPatt)
+                        //println("homeWorkArr: \(homeWorkArr)")
                         for hwStr in homeWorkArr {
                             //println("HW: \(hwStr)")
                             var hw = LessonHomework(state: "", text: hwStr)
@@ -164,7 +165,7 @@ class MarksViewController : UITableViewController {
                         lesson.avail.color = availStr
                         
                         // URL
-                        let urlPatt = "href=\"(http://\\D*?\\.dnevnik\\.ru/lesson\\.aspx.*?)\">"
+                        let urlPatt = "href=\"(http\\D*?\\.dnevnik\\.ru/lesson\\.aspx.*?)\">"
                         let urlStr = self.regManager.getFirstMatch(lessonBigStr, pattern: urlPatt)
                         lesson.url = urlStr
                     }
@@ -178,13 +179,13 @@ class MarksViewController : UITableViewController {
                 
                 // Prev week
                 let prevPatt = "<div class=\"tabs\">.*?<div class=\"player\">.*?<li class=\"pB\">\\s*?<a href=\"(.*?)\" title=\"Предыдущая неделя\">"
-                let prevURLTmp = self.regManager.getFirstMatch(fullHTML!, pattern: prevPatt)
+                let prevURLTmp = self.regManager.getFirstMatch(fullHTML, pattern: prevPatt)
                 // Next week
                 let nextPatt = "<li class=\"pF\">\\s*?<a href=\"(.*?)\" title=\"Следующая неделя\">"
-                let nextURLTmp = self.regManager.getFirstMatch(fullHTML!, pattern: nextPatt)
+                let nextURLTmp = self.regManager.getFirstMatch(fullHTML, pattern: nextPatt)
                 // This week
                 let thisPatt = "Следующая неделя.*?<li class=\".*?first link\">\\s*?<a href=\"(.*?)\">Текущая неделя"
-                let thisURLTmp = self.regManager.getFirstMatch(fullHTML!, pattern: thisPatt)
+                let thisURLTmp = self.regManager.getFirstMatch(fullHTML, pattern: thisPatt)
                 //println("prevURL: \(prevURLTmp), encoded: \(NSString(CString: prevURLTmp, encoding: NSUTF8StringEncoding))")
 
                 dispatch_async(dispatch_get_main_queue(), {
@@ -286,7 +287,7 @@ class MarksViewController : UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cellIdentifier = "LessonCell"
-        var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as LessonCell
+        var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! LessonCell
         
         let rowsInSection : [DnevnikLesson] = self.marksDays[indexPath.section].lessons
         let lesson = rowsInSection[indexPath.row]
@@ -298,8 +299,8 @@ class MarksViewController : UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "Lesson Details Segue" {
-            let lessonDetailsController = segue.destinationViewController as LessonTableController //LessonDetailsController
-            let indexPath = self.tableView.indexPathForCell(sender as LessonCell)!
+            let lessonDetailsController = segue.destinationViewController as! LessonTableController
+            let indexPath = self.tableView.indexPathForCell(sender as! LessonCell)!
             let rowsInSection : [DnevnikLesson] = self.marksDays[indexPath.section].lessons
             let lesson = rowsInSection[indexPath.row]
             lessonDetailsController.lesson = lesson

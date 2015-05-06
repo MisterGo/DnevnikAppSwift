@@ -43,8 +43,8 @@ class TimeTableViewController : UITableViewController {
         
         NSURLConnection.sendAsynchronousRequest(request, queue: queue) {response,data,error in
             if data != nil {
-                let fullHTML = NSString(data: data!, encoding: NSUTF8StringEncoding)
-                var headerText = self.regManager.getFirstMatch(fullHTML!, pattern: "Следующая неделя.*?<div class=\"light filter\">\\s*?<strong class=.*?>(.*?)</strong>.*?всего")
+                let fullHTML = NSString(data: data!, encoding: NSUTF8StringEncoding) as! String
+                var headerText = self.regManager.getFirstMatch(fullHTML, pattern: "Следующая неделя.*?<div class=\"light filter\">\\s*?<strong class=.*?>(.*?)</strong>.*?всего")
                 
                 headerText = headerText
                     .stringByReplacingOccurrencesOfString("&nbsp;", withString: " ", options: nil, range: nil)
@@ -55,7 +55,7 @@ class TimeTableViewController : UITableViewController {
                 var currentDateStr = ""
                 
                 let tHeaderPatt = "<th class=\"wD.*?\">.*?href=\"(.*?calendar.aspx.*?)\">"
-                let tHeaderStrings = self.regManager.getMatches(fullHTML!, pattern: tHeaderPatt)
+                let tHeaderStrings = self.regManager.getMatches(fullHTML, pattern: tHeaderPatt)
                 for tHeaderStr in tHeaderStrings {
                     let year = self.regManager.getFirstMatch(tHeaderStr, pattern: "year=(\\d{4})&")
                     let month = self.regManager.getFirstMatch(tHeaderStr, pattern: "&month=(\\d{1,2})&")
@@ -79,7 +79,7 @@ class TimeTableViewController : UITableViewController {
                 //println("\nttDict: \(ttDict.keys.array.sorted({$0 < $1}))")
                 
                 let ttLessonPatt = "<td id=\"d(\\d{8}_\\d{1,2})\" class=\"wD d\\d{8}\\s*?\">.*?</td>"
-                let ttLessonStrings = self.regManager.getStrings(fullHTML!, pattern: ttLessonPatt)
+                let ttLessonStrings = self.regManager.getStrings(fullHTML, pattern: ttLessonPatt)
                 for ttLessonStr in ttLessonStrings {
                     let match = self.regManager.getFirstMatch(ttLessonStr, pattern: ttLessonPatt)
                     let dateStr = match.substringToIndex(advance(match.startIndex, 8))
@@ -229,7 +229,7 @@ class TimeTableViewController : UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cellIdentifier = "TimeTableCell"
-        var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as TimeTableCell
+        var cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! TimeTableCell
         
         let rowsInSection : [TTLesson] = self.timeTable.days[indexPath.section].lessons
         let ttLesson = rowsInSection[indexPath.row] as TTLesson

@@ -41,6 +41,7 @@
 		5F857C6819DE79C500F144FA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F857C6619DE79C500F144FA /* LaunchScreen.xib */; };
 		5F857C7419DE79C500F144FA /* DnevnikAppSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F857C7319DE79C500F144FA /* DnevnikAppSwiftTests.swift */; };
 		5F8E3BCC1A36F23300EF2291 /* LessonDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8E3BCB1A36F23300EF2291 /* LessonDetailsController.swift */; };
+		5FB4095A1ACEDE1D006C87CB /* HTMLParse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB409591ACEDE1D006C87CB /* HTMLParse.swift */; };
 		5FF458351A6B867800708D37 /* TimeTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FF458341A6B867800708D37 /* TimeTable.swift */; };
 		5FFA3CD51A7CE03700FFE4BC /* TimeTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFA3CD41A7CE03700FFE4BC /* TimeTableCell.swift */; };
 		8B71E0FC73FDD085580C392B /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E69A918FDA93688B612DCE27 /* libPods.a */; };
@@ -99,6 +100,7 @@
 		5F857C7319DE79C500F144FA /* DnevnikAppSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnevnikAppSwiftTests.swift; sourceTree = "<group>"; };
 		5F8E3BCB1A36F23300EF2291 /* LessonDetailsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LessonDetailsController.swift; sourceTree = "<group>"; };
 		5F9FBFCB19E78E84003EF187 /* DnevnikAppSwift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DnevnikAppSwift-Bridging-Header.h"; sourceTree = "<group>"; };
+		5FB409591ACEDE1D006C87CB /* HTMLParse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTMLParse.swift; sourceTree = "<group>"; };
 		5FF458341A6B867800708D37 /* TimeTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeTable.swift; sourceTree = "<group>"; };
 		5FFA3CD41A7CE03700FFE4BC /* TimeTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeTableCell.swift; sourceTree = "<group>"; };
 		E69A918FDA93688B612DCE27 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -189,6 +191,7 @@
 				5F6D79D31A2B2E9800E202D1 /* HTTPHelper.swift */,
 				5F6D79D61A2DA9E500E202D1 /* DHNetworkManager.swift */,
 				5F1FE4621A30293F009282A7 /* RegexManager.swift */,
+				5FB409591ACEDE1D006C87CB /* HTMLParse.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -431,6 +434,7 @@
 				5F0362031A28F84300847B5A /* SidebarViewController.swift in Sources */,
 				5FF458351A6B867800708D37 /* TimeTable.swift in Sources */,
 				5F1C05041A4035FA004E8760 /* AboutViewController.swift in Sources */,
+				5FB4095A1ACEDE1D006C87CB /* HTMLParse.swift in Sources */,
 				5F7601091A3861F100859EB9 /* AboutController.swift in Sources */,
 				5F4D506B1A2A135300947443 /* TimeTableViewController.swift in Sources */,
 				5F4865781A3411E500741A61 /* LessonCell.swift in Sources */,
@@ -556,7 +560,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = DnevnikAppSwift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -573,7 +577,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = DnevnikAppSwift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

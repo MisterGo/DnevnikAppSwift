@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let cookieStor = NSHTTPCookieStorage.sharedHTTPCookieStorage()
         //println("CookieStor: \(cookieStor.description)")
-        let cookies = cookieStor.cookies as [NSHTTPCookie]
+        let cookies = cookieStor.cookies as! [NSHTTPCookie]
         for c in cookies {
             if c.domain == ".login.dnevnik.ru" {
                 //println(" - \(c.domain) - \(c.name) - \(c.value) - \(c.expiresDate)\n")

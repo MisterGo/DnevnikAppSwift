@@ -21,7 +21,7 @@ class RegManager {
         
         var matches : [String] = []
         var nsstr : NSString = NSString(string: input)
-        internalExpression.enumerateMatchesInString(input, options: NSMatchingOptions(0), range: NSMakeRange(0, countElements(input))) {
+        internalExpression.enumerateMatchesInString(input, options: NSMatchingOptions(0), range: NSMakeRange(0, count(input))) {
             (result : NSTextCheckingResult!, _, _) in
             resultStr.append(nsstr.substringWithRange(result.range))
             matches.append(nsstr.substringWithRange(result.rangeAtIndex(1)))
@@ -37,7 +37,7 @@ class RegManager {
         
         var matches : [String] = []
         var nsstr : NSString = NSString(string: input)
-        internalExpression.enumerateMatchesInString(input, options: NSMatchingOptions(0), range: NSMakeRange(0, countElements(input))) {
+        internalExpression.enumerateMatchesInString(input, options: NSMatchingOptions(0), range: NSMakeRange(0, count(input))) {
             (result : NSTextCheckingResult!, _, _) in
             //            self.resultStr.append(nsstr.substringWithRange(result.range))
             matches.append(nsstr.substringWithRange(result.range))
@@ -87,7 +87,7 @@ class RegexManager {
         //let matches = self.internalExpression.matchesInString(input, options: nil, range:NSMakeRange(0, countElements(input)))
         var matches : [String] = []
         var nsstr : NSString = NSString(string: input)
-        self.internalExpression.enumerateMatchesInString(input, options: NSMatchingOptions(0), range: NSMakeRange(0, countElements(input))) {
+        self.internalExpression.enumerateMatchesInString(input, options: NSMatchingOptions(0), range: NSMakeRange(0, count(input))) {
             (result : NSTextCheckingResult!, _, _) in
                 self.resultStr.append(nsstr.substringWithRange(result.range))
                 matches.append(nsstr.substringWithRange(result.rangeAtIndex(1)))
@@ -100,7 +100,7 @@ class RegexManager {
         //let matches = self.internalExpression.matchesInString(input, options: nil, range:NSMakeRange(0, countElements(input)))
         var matches : [String] = []
         var nsstr : NSString = NSString(string: input)
-        self.internalExpression.enumerateMatchesInString(input, options: NSMatchingOptions(0), range: NSMakeRange(0, countElements(input))) {
+        self.internalExpression.enumerateMatchesInString(input, options: NSMatchingOptions(0), range: NSMakeRange(0, count(input))) {
             (result : NSTextCheckingResult!, _, _) in
 //            self.resultStr.append(nsstr.substringWithRange(result.range))
             matches.append(nsstr.substringWithRange(result.range))

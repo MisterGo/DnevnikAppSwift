@@ -35,7 +35,7 @@ class DHNetworkManager: AFHTTPSessionManager {
         super.init(baseURL: url, sessionConfiguration: .defaultSessionConfiguration())
         
         self.responseSerializer = AFJSONResponseSerializer() as AFHTTPResponseSerializer
-        self.responseSerializer.acceptableContentTypes = NSSet(object: "text/html")
+        self.responseSerializer.acceptableContentTypes = NSSet(object: "text/html") as Set<NSObject>
 
         self.requestSerializer = AFJSONRequestSerializer() as AFHTTPRequestSerializer
         
@@ -49,7 +49,7 @@ class DHNetworkManager: AFHTTPSessionManager {
     func requestData(url: NSString, requestSucceeded: (dHResponse: AnyObject) -> Void, requestFailed: (error: NSError) -> Void) {
         isLoading = true
        
-        let sessionDataTask = self.GET(url,
+        let sessionDataTask = self.GET(url as String,
             parameters: nil,
             success: { (dataTask: NSURLSessionDataTask!, response: AnyObject!) -> Void in
                 self.isLoading = false
